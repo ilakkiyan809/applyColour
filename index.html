@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Magical Garden Animal Coloring Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butterfly Wing Coloring: Magic Garden</title>
     <style>
 /* ==========================================================================
    CSS Token Matrix: Rich Pastel Balanced High-Contrast Configuration
    ========================================================================== */
 :root {
+    /* Rich, Soothing Ground and Sky Visual Tokens */
     --bg-sky: #C2E7FF;
     --bg-controls: #F8FAFC;
     --border-main: #94A3B8;
@@ -16,24 +17,25 @@
     --text-primary: #1E293B;
     --text-success: #DB2777;
 
-    --stroke-animal: #1E293B;
+    --stroke-butterfly: #1E293B;
     --cell-default: #FFFFFF;
     --focus-ring: #3B82F6;
 
-    /* Soft but Rich Balanced Color Palette */
-    --color-1: #FF7da7; 
-    --color-2: #CE93D8; 
-    --color-3: #64B5F6; 
-    --color-4: #4DD0E1; 
-    --color-5: #81C784; 
-    --color-6: #FFF176; 
-    --color-7: #FFB74D; 
-    --color-8: #E57373; 
-    --color-9: #BCAAA4; 
-    --color-10: #FFFFFF; 
-    --color-11: #B0BEC5; 
-    --color-12: #4DB6AC; 
+    /* Soft but Rich Highly Contrastive Pastel Solid Color Matrix Palette */
+    --color-1: #FF7da7; /* Balanced Rich Pink */
+    --color-2: #CE93D8; /* Soft Balanced Purple */
+    --color-3: #64B5F6; /* Rich Cornflower Blue */
+    --color-4: #4DD0E1; /* Clear Light Turquoise Cyan */
+    --color-5: #81C784; /* Soft Deep Meadow Green */
+    --color-6: #FFF176; /* Rich Creamy Lemon Yellow */
+    --color-7: #FFB74D; /* Soft Velvet Sweet Orange */
+    --color-8: #E57373; /* Smooth Coral Red */
+    --color-9: #BCAAA4; /* Rich Pastel Walnut Brown */
+    --color-10: #FFFFFF; /* Pure White canvas */
+    --color-11: #B0BEC5; /* Clean Silver Slate Gray */
+    --color-12: #4DB6AC; /* Vivid Seafoam Mint Green */
 
+    /* Universal Timers Matrix */
     --duration-sway: 4.2s;
     --duration-drift: 24s;
     --duration-flap: 0.8s;
@@ -42,12 +44,15 @@
     --font-family: 'Comic Sans MS', 'Chalkboard SE', 'Open Sans', system-ui, sans-serif;
 }
 
+/* ==========================================================================
+   Accessibility Architecture Structural States Overrides
+   ========================================================================== */
 [data-a11y-contrast="true"] {
     --bg-sky: #FFFFFF;
     --bg-controls: #FFFFFF;
     --border-main: #000000;
     --text-primary: #000000;
-    --stroke-animal: #000000;
+    --stroke-butterfly: #000000;
     --focus-ring: #0000FF;
     --text-success: #FF0055;
 }
@@ -55,6 +60,7 @@
 [data-a11y-motion="true"] {
     --duration-sway: 0s !important;
     --duration-drift: 0s !important;
+    --duration-flap: 0s !important;
 }
 
 /* ==========================================================================
@@ -73,9 +79,10 @@ body {
     line-height: 1.4;
     background-color: var(--bg-controls);
     color: var(--text-primary);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     user-select: none;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -88,25 +95,9 @@ body {
     background-color: #FFFFFF;
     border-bottom: 3px solid var(--border-main);
     z-index: 100;
-    gap: 16px;
-    flex-wrap: wrap;
 }
 
-.a11y-controls { display: flex; gap: 12px; align-items: center; }
-
-.select-animal-dropdown {
-    min-height: 52px;
-    padding: 8px 16px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #1E293B;
-    background-color: #F0FDF4;
-    border: 3.5px solid #2E7D32;
-    border-radius: 25px;
-    cursor: pointer;
-    outline: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
+.a11y-controls { display: flex; gap: 12px; }
 
 .utility-btn {
     min-height: 52px; padding: 8px 18px;
@@ -136,12 +127,40 @@ body {
 }
 
 .sky-gradient {
-    position: absolute; top: 0; left: 0; width: 100%; height: 74%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 65%;
+    height: 74%;
     background:
         radial-gradient(circle at 16% 14%, rgba(255, 252, 220, 0.55), transparent 32%),
         radial-gradient(circle at 78% 22%, rgba(181, 234, 255, 0.45), transparent 40%),
         linear-gradient(to bottom, #96D6FF 0%, #CFEFFF 45%, #EAFBFF 78%, #F4FFF8 100%);
     z-index: 1;
+}
+
+.sky-gradient::before,
+.sky-gradient::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(14px);
+    pointer-events: none;
+}
+
+.sky-gradient::before {
+    width: 220px;
+    height: 220px;
+    top: 16%;
+    left: 28%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0));
+    animation: driftSkyGlow 16s ease-in-out infinite;
+}
+
+.sky-gradient::after {
+    width: 170px;
+    height: 170px;
+    top: 6%;
+    right: 22%;
+    background: radial-gradient(circle, rgba(255, 247, 211, 0.45), rgba(255, 247, 211, 0));
+    animation: driftSkyGlow 19s ease-in-out infinite reverse;
 }
 
 .sun-glow {
@@ -150,6 +169,7 @@ body {
     border-radius: 50%; z-index: 1;
 }
 
+/* Layered Landscape Scenic Green Hills */
 .landscape-hill { position: absolute; border-radius: 45%; z-index: 2; }
 .hill-distant {
     width: 110%; height: 260px; bottom: 40px; left: -5%;
@@ -169,13 +189,8 @@ body {
 .ground-floor {
     width: 100%; height: 60px;
     background: linear-gradient(180deg, #3A9F46 0%, #2E7D32 100%);
+    box-shadow: inset 0 10px 16px rgba(255, 255, 255, 0.12);
     position: relative; z-index: 3;
-}
-
-.ladybug-leaf {
-    position: absolute; bottom: 40px; right: 8%; width: 150px; height: 60px;
-    background: #4CAF50; border: 4px solid #2E7D32; border-radius: 0 50% 0 50%;
-    transform: rotate(-15deg); z-index: 3;
 }
 
 .grass-cluster {
@@ -186,12 +201,14 @@ body {
 .gc-2 { height: 30px; left: 40%; animation: swayGrass calc(var(--duration-sway) * 1.3) ease-in-out infinite -0.6s; }
 .gc-3 { height: 48px; left: 80%; animation: swayGrass calc(var(--duration-sway) * 0.9) ease-in-out infinite -1.2s; }
 
+/* Target Landing Flower Placement metrics */
 .target-flower {
     width: 120px; height: 150px; position: absolute; bottom: 5px; right: 10%;
     transform-origin: bottom center; animation: swayFlower var(--duration-sway) ease-in-out infinite; z-index: 4;
 }
 .flower-petals-sway { transform-origin: 80px 98px; }
 
+/* Drifting Cloud Entities */
 .cloud { position: absolute; background: #FFFFFF; border-radius: 40px; opacity: 0.92; z-index: 1; }
 .cloud::before, .cloud::after { content: ''; position: absolute; background: #FFFFFF; border-radius: 50%; }
 .cloud-1 { width: 130px; height: 42px; top: 15%; left: 5%; animation: driftCloud var(--duration-drift) linear infinite; }
@@ -203,74 +220,64 @@ body {
 .cloud-3 { width: 90px; height: 30px; top: 8%; right: 35%; opacity: 0.6; animation: driftCloud calc(var(--duration-drift) * 1.6) linear infinite; }
 
 /* ==========================================================================
-   Unified Master Animal Canvas Viewport Management Layouts
+   Butterfly Positioning Architecture (Painting vs Flight layout engines)
    ========================================================================== */
-.animal-positioner-center {
+.butterfly-positioner-center {
     position: absolute;
     width: 480px; height: 400px;
     z-index: 20;
     display: flex; justify-content: center; align-items: center;
-    left: 50%; top: 46%;
+    /* Static Center Placement coordinates when painting */
+    left: 50%; top: 48%;
     transform: translate(-50%, -50%);
+    transition: none; /* Reset custom movement variables cleanly on fly-backs */
 }
 
-.animal-positioner-center.in-motion {
-    transition: all 4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-}
-
-.animal-wrapper {
+.butterfly-wrapper {
     width: 100%; height: 100%;
     transform-origin: center center;
 }
-.animal-wrapper.hovering { animation: gentleBob var(--duration-sway) ease-in-out infinite; }
+.butterfly-wrapper.hovering { animation: gentleBob var(--duration-sway) ease-in-out infinite; }
 
-svg#animal-svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* Visibility Control Layer System */
-.animal-model {
-    display: none;
-}
-
-/* Visibility Routing Flags */
-[data-active-animal="butterfly"] #model-butterfly { display: block; }
-[data-active-animal="ladybug"] #model-ladybug { display: block; }
-[data-active-animal="snail"] #model-snail { display: block; }
-[data-active-animal="bee"] #model-bee { display: block; }
-[data-active-animal="caterpillar"] #model-caterpillar { display: block; }
-
-/* Global Colorable Vectors Definition */
+/* ==========================================================================
+   Painting Canvas Targets Vectors
+   ========================================================================== */
 .colorable-cell {
-    fill: var(--cell-default); stroke: var(--stroke-animal);
+    fill: var(--cell-default); stroke: var(--stroke-butterfly);
     stroke-width: 5px; stroke-linejoin: round; cursor: pointer;
     transition: fill var(--transition-color), stroke-width 0.15s ease;
 }
 
+/* Intuitive Signalling: soft dashed pulse highlights unpainted regions */
 .colorable-cell.uncolored {
     animation: implicitPulse 2s ease-in-out infinite;
     stroke-dasharray: 8, 4;
 }
 
 .colorable-cell:hover, .colorable-cell:active { stroke-width: 6.5px; }
-.colorable-cell.wing-base, .colorable-cell.shell-base, .colorable-cell.body-base { stroke-width: 7px; fill: #FCFCFC; }
-.colorable-cell:focus-visible { stroke: var(--focus-ring); stroke-width: 9px; stroke-dasharray: none; outline: none; }
+.colorable-cell.wing-base { stroke-width: 7px; fill: #FCFCFC; }
 
-/* Custom Animal Animation Flap States */
-#lw-group, #rw-group { transform-origin: 300px 250px; }
-.flapping #lw-group { animation: flapLeft 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
-.flapping #rw-group { animation: flapRight 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+.colorable-cell:focus-visible {
+    stroke: var(--focus-ring); stroke-width: 9px; stroke-dasharray: none; outline: none;
+}
 
-#bee-lw, #bee-rw { transform-origin: 300px 220px; }
-.buzzing #bee-lw { animation: flapLeft 0.15s linear infinite; }
-.buzzing #bee-rw { animation: flapRight 0.15s linear infinite; }
+/* Wing Flap Keyframes Geometry mappings */
+#left-wing-group { transform-origin: 300px 250px; }
+#right-wing-group { transform-origin: 300px 250px; }
 
-.crawling-snail { animation: snailStretch 1s ease-in-out infinite; }
-.crawling-caterpillar { animation: caterpillarInch 0.9s ease-in-out infinite; }
+.flapping #left-wing-group { animation: flapLeft calc(var(--duration-flap) * 0.9) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+.flapping #right-wing-group { animation: flapRight calc(var(--duration-flap) * 0.9) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
 
 /* ==========================================================================
-   Overlay & Controls UI Console Interface Layouts
+   Flight Path Structural Execution (The Smooth 3D Move Curves)
+   ========================================================================== */
+.butterfly-positioner-center.in-flight {
+    transition: all 4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    /* Coordinates map directly handled via JavaScript Engine injection properties */
+}
+
+/* ==========================================================================
+   Particles & Special Effects Layers
    ========================================================================== */
 .particle-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 18; }
 .sparkle {
@@ -279,8 +286,11 @@ svg#animal-svg {
     animation: fadeOutParticle 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   Console Menu & Systems command arrays
+   ========================================================================== */
 .controls-section {
-    flex: 1.3; background-color: var(--bg-controls);
+    flex: 1.2; background-color: var(--bg-controls);
     display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;
     padding: 14px 18px; gap: 10px; z-index: 50; border-top: 4px solid var(--border-main);
 }
@@ -293,7 +303,23 @@ svg#animal-svg {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; position: relative;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); outline: none;
 }
-.color-swatch.selected { transform: scale(1.15); border-color: #334155; box-shadow: 0 0 0 4px var(--focus-ring); }
+
+.color-swatch:nth-child(1) { background-color: var(--color-1); }
+.color-swatch:nth-child(2) { background-color: var(--color-2); }
+.color-swatch:nth-child(3) { background-color: var(--color-3); }
+.color-swatch:nth-child(4) { background-color: var(--color-4); }
+.color-swatch:nth-child(5) { background-color: var(--color-5); }
+.color-swatch:nth-child(6) { background-color: var(--color-6); }
+.color-swatch:nth-child(7) { background-color: var(--color-7); }
+.color-swatch:nth-child(8) { background-color: var(--color-8); }
+.color-swatch:nth-child(9) { background-color: var(--color-9); }
+.color-swatch:nth-child(10) { background-color: var(--color-10); border-color: #E2E8F0; }
+.color-swatch:nth-child(11) { background-color: var(--color-11); }
+.color-swatch:nth-child(12) { background-color: var(--color-12); }
+
+.color-swatch.selected {
+    transform: scale(1.12); border-color: #334155; box-shadow: 0 0 0 4px var(--focus-ring);
+}
 
 .actions-panel { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; max-width: 920px; }
 
@@ -305,13 +331,17 @@ svg#animal-svg {
     display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .action-btn:active { transform: scale(0.95); }
-.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.action-btn:focus-visible { border-color: var(--focus-ring); outline: none; }
 
 .fly-action {
-    background-color: #81C784; border-color: #4CAF50; color: #1B5E20; min-width: 280px; text-transform: uppercase;
+    background-color: #81C784; border-color: #4CAF50; color: #1B5E20;
+    min-width: 280px; text-transform: uppercase;
+    box-shadow: 0 6px 14px rgba(76,175,80,0.3);
     animation: callToActionPulse 2.5s infinite;
 }
-.reset-action { background-color: #4DD0E1; border-color: #26A69A; color: #004D40; min-width: 240px; }
+.reset-action {
+    background-color: #4DD0E1; border-color: #26A69A; color: #004D40; min-width: 240px;
+}
 
 .success-banner {
     position: absolute; top: 15%; background-color: rgba(255, 255, 255, 0.98);
@@ -325,13 +355,83 @@ svg#animal-svg {
 
 .hidden { display: none !important; }
 
-/* Responsive Adjustments */
 @media (max-width: 900px) {
-    .utility-bar { padding: 10px 12px; gap: 8px; }
-    .animal-positioner-center { width: min(92vw, 420px); height: min(64vw, 340px); }
-    .action-btn { min-height: 52px; font-size: 1.05rem; padding: 10px 16px; }
-    .fly-action, .reset-action { min-width: 210px; }
-    .success-message { font-size: 2rem; }
+    .utility-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .utility-btn {
+        min-height: 44px;
+        font-size: 0.95rem;
+        padding: 8px 12px;
+    }
+
+    .butterfly-positioner-center {
+        width: min(92vw, 420px);
+        height: min(64vw, 340px);
+        top: 47%;
+    }
+
+    .controls-section {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .color-swatch {
+        min-width: 40px;
+        border-width: 2px;
+    }
+
+    .action-btn {
+        min-height: 50px;
+        min-width: 110px;
+        font-size: 1rem;
+        padding: 10px 14px;
+    }
+
+    .fly-action,
+    .reset-action {
+        min-width: 210px;
+    }
+
+    .success-message {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .a11y-controls {
+        width: 100%;
+    }
+
+    .a11y-controls .utility-btn,
+    .audio-btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .actions-panel {
+        gap: 10px;
+    }
+
+    .action-btn,
+    .fly-action,
+    .reset-action {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .target-flower {
+        width: 98px;
+        height: 126px;
+        right: 5%;
+    }
+
+    .viewport {
+        min-height: 62vh;
+    }
 }
 
 /* ==========================================================================
@@ -339,41 +439,50 @@ svg#animal-svg {
    ========================================================================== */
 @keyframes gentleBob {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(0.4deg); }
+    25% { transform: translateY(-5px) rotate(-0.6deg); }
+    50% { transform: translateY(-10px) rotate(0.35deg); }
+    75% { transform: translateY(-5px) rotate(0.6deg); }
 }
-@keyframes flapLeft { 0%, 100% { transform: scale3d(1,1,1); } 50% { transform: scale3d(0.22, 1, 1); } }
-@keyframes flapRight { 0%, 100% { transform: scale3d(1,1,1); } 50% { transform: scale3d(0.22, 1, 1); } }
+@keyframes flapLeft {
+    0%, 100% { transform: scale3d(1, 1, 1) rotate(0deg); }
+    40% { transform: scale3d(0.45, 1, 1) rotate(-6deg); }
+    70% { transform: scale3d(0.8, 1, 1) rotate(-2deg); }
+}
+@keyframes flapRight {
+    0%, 100% { transform: scale3d(1, 1, 1) rotate(0deg); }
+    40% { transform: scale3d(0.45, 1, 1) rotate(6deg); }
+    70% { transform: scale3d(0.8, 1, 1) rotate(2deg); }
+}
 @keyframes swayFlower { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(2deg); } }
 @keyframes swayGrass { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
-@keyframes driftCloud { 0% { transform: translateX(0); } 50% { transform: translateX(35px); } 100% { transform: translateX(0); } }
+@keyframes driftCloud {
+    0% { transform: translateX(0) translateY(0); }
+    35% { transform: translateX(22px) translateY(-4px); }
+    70% { transform: translateX(40px) translateY(2px); }
+    100% { transform: translateX(0) translateY(0); }
+}
+@keyframes driftSkyGlow {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -10px); }
+}
 @keyframes fadeOutParticle { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; } }
 @keyframes floatingHeart { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 20% { opacity: 0.95; } 100% { transform: translateY(-100px) scale(1.4); opacity: 0; } }
-@keyframes implicitPulse { 0%, 100% { stroke: var(--stroke-animal); stroke-opacity: 1; } 50% { stroke: #3B82F6; stroke-opacity: 0.5; } }
-@keyframes callToActionPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 
-/* Insect Locomotion Stretch Animations */
-@keyframes snailStretch {
-    0%, 100% { transform: scaleX(1); }
-    50% { transform: scaleX(1.06) scaleY(0.96); }
+@keyframes implicitPulse {
+    0%, 100% { stroke: var(--stroke-butterfly); stroke-opacity: 1; }
+    50% { stroke: #3B82F6; stroke-opacity: 0.5; }
 }
-@keyframes caterpillarInch {
-    0%, 100% { transform: scaleX(1) translateY(0); }
-    50% { transform: scaleX(0.88) scaleY(1.12) translateY(-8px); }
+@keyframes callToActionPulse {
+    0%, 100% { box-shadow: 0 6px 14px rgba(76,175,80,0.3); transform: scale(1) translateY(0); }
+    50% { box-shadow: 0 10px 24px rgba(76,175,80,0.45); transform: scale(1.03) translateY(-1px); }
 }
     </style>
 </head>
 <body>
 
-    <!-- Accessible Utility Header with Animal Selection Switcher -->
+    <!-- Accessible Utility Header -->
     <header class="utility-bar" role="banner">
         <div class="a11y-controls">
-            <select id="animal-selector" class="select-animal-dropdown" aria-label="Select an animal to paint">
-                <option value="butterfly">🦋 Beautiful Butterfly</option>
-                <option value="ladybug">🐞 Dotted Ladybug</option>
-                <option value="snail">🐌 Slow Snail</option>
-                <option value="bee">🐝 Fuzzy Bumblebee</option>
-                <option value="caterpillar">🐛 Wiggling Caterpillar</option>
-            </select>
             <button id="btn-contrast" class="utility-btn" aria-pressed="false">👁️ High Contrast</button>
             <button id="btn-motion" class="utility-btn" aria-pressed="false">🐢 Slow Motion</button>
         </div>
@@ -384,8 +493,10 @@ svg#animal-svg {
 
     <main class="game-container">
         
-        <section class="viewport" aria-label="Coloring Studio Room">
+        <!-- Interactive Canvas Viewport -->
+        <section class="viewport" aria-label="Coloring and Flight Canvas">
             
+            <!-- Immersive Scenic Background Garden -->
             <div class="garden-background">
                 <div class="sky-gradient">
                     <div class="cloud cloud-1"></div>
@@ -394,10 +505,10 @@ svg#animal-svg {
                     <div class="sun-glow"></div>
                 </div>
                 
+                <!-- Scenic Garden Layers -->
                 <div class="landscape-hill hill-distant"></div>
                 <div class="landscape-hill hill-mid"></div>
                 <div class="landscape-hill hill-close"></div>
-                <div class="ladybug-leaf"></div>
                 
                 <div class="ground-floor">
                     <div class="grass-cluster gc-1"></div>
@@ -405,7 +516,8 @@ svg#animal-svg {
                     <div class="grass-cluster gc-3"></div>
                 </div>
 
-                <div id="target-flower" class="target-flower" role="img" aria-label="Target flower">
+                <!-- Friendly Landing Target Flower -->
+                <div id="target-flower" class="target-flower" role="img" aria-label="Smiling target landing flower">
                     <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
                         <path d="M 80 120 Q 75 160, 80 200" fill="none" stroke="#2E7D32" stroke-width="9" stroke-linecap="round"/>
                         <path d="M 80 150 Q 55 145, 45 130" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round"/>
@@ -416,6 +528,7 @@ svg#animal-svg {
                             <circle cx="100" cy="135" r="30" fill="#FF8A80"/>
                             <circle cx="115" cy="90" r="30" fill="#FF8A80"/>
                             <circle cx="80" cy="98" r="28" fill="#FFE082"/>
+                            <!-- Face -->
                             <circle cx="70" cy="94" r="3.5" fill="#374151"/>
                             <circle cx="90" cy="94" r="3.5" fill="#374151"/>
                             <path d="M 72 106 Q 80 114, 88 106" fill="none" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
@@ -424,33 +537,38 @@ svg#animal-svg {
                 </div>
             </div>
 
-            <!-- Preloaded Static Layout Model Matrix Viewport -->
-            <div id="butterfly-positioner" class="butterfly-positioner-center" data-active-animal="butterfly">
-                <div id="butterfly-wrapper" class="animal-wrapper hovering">
-                    <svg id="animal-svg" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" filter="url(#natural-shadow)">
+            <!-- The Butterfly (Centered Canvas Area) -->
+            <div id="butterfly-positioner" class="butterfly-positioner-center">
+                <div id="butterfly-wrapper" class="butterfly-wrapper hovering">
+                    <svg id="butterfly" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Butterfly illustration with paintable cells">
                         <defs>
                             <filter id="natural-shadow" x="-20%" y="-20%" width="140%" height="140%">
                                 <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#1e293b" flood-opacity="0.12"/>
                             </filter>
                         </defs>
-                        
-                        <!-- 1. BUTTERFLY LAYER -->
-                        <g id="model-butterfly" class="animal-model">
-                            <g id="lw-group">
-                                <path id="b-lw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 200 100, 50 120, 50 220 C 50 320, 180 340, 220 380 C 250 410, 290 430, 300 400 Z"/>
-                                <path id="b-lw-1" class="colorable-cell uncolored" d="M 280 230 C 210 140, 110 150, 80 210 C 110 240, 200 230, 280 230 Z"/>
-                                <path id="b-lw-2" class="colorable-cell uncolored" d="M 74 225 C 64 260, 100 300, 150 300 C 170 270, 220 250, 274 242 C 190 240, 110 250, 74 225 Z"/>
-                                <path id="b-lw-3" class="colorable-cell uncolored" d="M 160 312 C 110 320, 130 360, 210 375 C 230 350, 240 320, 268 260 C 210 270, 180 290, 160 312 Z"/>
-                                <path id="b-lw-4" class="colorable-cell uncolored" d="M 222 380 C 250 400, 275 405, 286 385 C 282 340, 280 300, 276 262 C 250 310, 240 340, 222 380 Z"/>
+
+                        <g filter="url(#natural-shadow)">
+                            
+                            <!-- LEFT WINGS -->
+                            <g id="left-wing-group">
+                                <path id="cell-lw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 200 100, 50 120, 50 220 C 50 320, 180 340, 220 380 C 250 410, 290 430, 300 400 Z" role="button" aria-label="Left wing base frame" tabindex="0"/>
+                                <path id="cell-lw-1" class="colorable-cell uncolored" d="M 280 230 C 210 140, 110 150, 80 210 C 110 240, 200 230, 280 230 Z" role="button" aria-label="Left upper wing upper section" tabindex="0"/>
+                                <path id="cell-lw-2" class="colorable-cell uncolored" d="M 74 225 C 64 260, 100 300, 150 300 C 170 270, 220 250, 274 242 C 190 240, 110 250, 74 225 Z" role="button" aria-label="Left upper wing lower section" tabindex="0"/>
+                                <path id="cell-lw-3" class="colorable-cell uncolored" d="M 160 312 C 110 320, 130 360, 210 375 C 230 350, 240 320, 268 260 C 210 270, 180 290, 160 312 Z" role="button" aria-label="Left lower wing outer section" tabindex="0"/>
+                                <path id="cell-lw-4" class="colorable-cell uncolored" d="M 222 380 C 250 400, 275 405, 286 385 C 282 340, 280 300, 276 262 C 250 310, 240 340, 222 380 Z" role="button" aria-label="Left lower wing inner section" tabindex="0"/>
                             </g>
-                            <g id="rw-group">
-                                <path id="b-rw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 400 100, 550 120, 550 220 C 550 320, 420 340, 380 380 C 350 410, 310 430, 300 400 Z"/>
-                                <path id="b-rw-1" class="colorable-cell uncolored" d="M 320 230 C 390 140, 490 150, 520 210 C 490 240, 400 230, 320 230 Z"/>
-                                <path id="b-rw-2" class="colorable-cell uncolored" d="M 526 225 C 536 260, 500 300, 450 300 C 430 270, 380 250, 326 242 C 410 240, 490 250, 526 225 Z"/>
-                                <path id="b-rw-3" class="colorable-cell uncolored" d="M 440 312 C 490 320, 470 360, 390 375 C 370 350, 360 320, 332 260 C 390 270, 420 290, 440 312 Z"/>
-                                <path id="b-rw-4" class="colorable-cell uncolored" d="M 378 380 C 350 400, 325 405, 314 385 C 318 340, 320 300, 324 262 C 350 310, 360 340, 378 380 Z"/>
+
+                            <!-- RIGHT WINGS -->
+                            <g id="right-wing-group">
+                                <path id="cell-rw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 400 100, 550 120, 550 220 C 550 320, 420 340, 380 380 C 350 410, 310 430, 300 400 Z" role="button" aria-label="Right wing base frame" tabindex="0"/>
+                                <path id="cell-rw-1" class="colorable-cell uncolored" d="M 320 230 C 390 140, 490 150, 520 210 C 490 240, 400 230, 320 230 Z" role="button" aria-label="Right upper wing upper section" tabindex="0"/>
+                                <path id="cell-rw-2" class="colorable-cell uncolored" d="M 526 225 C 536 260, 500 300, 450 300 C 430 270, 380 250, 326 242 C 410 240, 490 250, 526 225 Z" role="button" aria-label="Right upper wing lower section" tabindex="0"/>
+                                <path id="cell-rw-3" class="colorable-cell uncolored" d="M 440 312 C 490 320, 470 360, 390 375 C 370 350, 360 320, 332 260 C 390 270, 420 290, 440 312 Z" role="button" aria-label="Right lower wing outer section" tabindex="0"/>
+                                <path id="cell-rw-4" class="colorable-cell uncolored" d="M 378 380 C 350 400, 325 405, 314 385 C 318 340, 320 300, 324 262 C 350 310, 360 340, 378 380 Z" role="button" aria-label="Right lower wing inner section" tabindex="0"/>
                             </g>
-                            <g id="b-core-body" pointer-events="none">
+
+                            <!-- CENTER CORE MAIN BODY -->
+                            <g id="butterfly-body">
                                 <path d="M 290 150 Q 260 100, 240 110" fill="none" stroke="#334155" stroke-width="5.5" stroke-linecap="round"/>
                                 <path d="M 310 150 Q 340 100, 360 110" fill="none" stroke="#334155" stroke-width="5.5" stroke-linecap="round"/>
                                 <circle cx="240" cy="110" r="7.5" fill="#334155"/>
@@ -462,184 +580,124 @@ svg#animal-svg {
                                 <path d="M 290 158 Q 300 167, 310 158" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
                             </g>
                         </g>
-
-                        <!-- 2. LADYBUG LAYER -->
-                        <g id="model-ladybug" class="animal-model">
-                            <path id="l-shell-base" class="colorable-cell shell-base uncolored" d="M 300 380 C 160 380, 140 200, 300 160 C 460 200, 440 380, 300 380 Z"/>
-                            <path id="l-split-line" d="M 300 160 L 300 380" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
-                            <circle id="l-spot-1" class="colorable-cell uncolored" cx="220" cy="220" r="18"/>
-                            <circle id="l-spot-2" class="colorable-cell uncolored" cx="200" cy="290" r="22"/>
-                            <circle id="l-spot-3" class="colorable-cell uncolored" cx="250" cy="340" r="16"/>
-                            <circle id="l-spot-4" class="colorable-cell uncolored" cx="380" cy="220" r="18"/>
-                            <circle id="l-spot-5" class="colorable-cell uncolored" cx="400" cy="290" r="22"/>
-                            <circle id="l-spot-6" class="colorable-cell uncolored" cx="350" cy="340" r="16"/>
-                            <g id="l-head-core" pointer-events="none">
-                                <path d="M 250 170 C 250 110, 350 110, 350 170 Z" fill="#334155" stroke="#1E293B" stroke-width="4"/>
-                                <circle cx="285" cy="140" r="3" fill="#FFFFFF"/>
-                                <circle cx="315" cy="140" r="3" fill="#FFFFFF"/>
-                                <path d="M 240 130 Q 220 90, 190 100" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 360 130 Q 380 90, 410 100" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                            </g>
-                        </g>
-
-                        <!-- 3. SNAIL LAYER -->
-                        <g id="model-snail" class="animal-model">
-                            <path id="s-foot-base" class="colorable-cell body-base uncolored" d="M 100 360 C 150 330, 420 330, 480 360 C 520 370, 520 390, 460 390 C 320 390, 120 390, 90 385 C 80 380, 85 365, 100 360 Z"/>
-                            <path id="s-neck" class="colorable-cell uncolored" d="M 440 360 C 460 320, 480 240, 520 230 C 550 220, 560 270, 520 310 C 490 340, 470 365, 450 375 Z"/>
-                            <g id="s-shell-group">
-                                <circle id="s-shell-1" class="colorable-cell uncolored" cx="290" cy="280" r="95"/>
-                                <circle id="s-shell-2" class="colorable-cell uncolored" cx="290" cy="280" r="65"/>
-                                <circle id="s-shell-3" class="colorable-cell uncolored" cx="290" cy="280" r="35"/>
-                            </g>
-                            <g id="s-face-elements" pointer-events="none">
-                                <path d="M 525 210 Q 535 160, 545 165" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 510 215 Q 505 165, 495 170" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                                <circle cx="545" cy="165" r="5" fill="#334155"/>
-                                <circle cx="495" cy="170" r="5" fill="#334155"/>
-                                <circle cx="522" cy="240" r="3" fill="#334155"/>
-                                <path d="M 526 250 Q 532 254, 536 248" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-                            </g>
-                        </g>
-
-                        <!-- 4. BEE LAYER -->
-                        <g id="model-bee" class="animal-model">
-                            <g id="bee-wings-layer">
-                                <ellipse id="bee-lw" class="colorable-cell uncolored" cx="260" cy="170" rx="25" ry="65" transform="rotate(-35 260 170)"/>
-                                <ellipse id="bee-rw" class="colorable-cell uncolored" cx="340" cy="170" rx="25" ry="65" transform="rotate(35 340 170)"/>
-                            </g>
-                            <ellipse id="bee-body-base" class="colorable-cell body-base uncolored" cx="300" cy="280" rx="85" ry="65"/>
-                            <path id="bee-stripe-1" class="colorable-cell uncolored" d="M 260 220 Q 265 280, 260 340 C 278 343, 292 343, 310 340 Q 315 280, 310 220 Z"/>
-                            <path id="bee-stripe-2" class="colorable-cell uncolored" d="M 340 225 Q 342 280, 340 335 C 355 330, 365 322, 378 310 Q 375 270, 368 238 Z"/>
-                            <g id="bee-face-details" pointer-events="none">
-                                <circle cx="242" cy="265" r="4.5" fill="#334155"/>
-                                <circle cx="244" cy="263" r="1.5" fill="#FFFFFF"/>
-                                <path d="M 232 282 Q 242 292, 252 280" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
-                                <path d="M 225 240 Q 200 210, 185 220" fill="none" stroke="#334155" stroke-width="4.5" stroke-linecap="round"/>
-                                <circle cx="185" cy="220" r="6" fill="#334155"/>
-                            </g>
-                        </g>
-
-                        <!-- 5. CATERPILLAR LAYER -->
-                        <g id="model-caterpillar" class="animal-model">
-                            <g id="c-legs-group" stroke="#334155" stroke-width="6" stroke-linecap="round" fill="none">
-                                <path d="M 160 330 L 150 360 M 220 340 L 210 370 M 290 340 L 280 370 M 360 330 L 350 360 M 430 300 L 420 330"/>
-                            </g>
-                            <circle id="c-seg-1" class="colorable-cell uncolored" cx="150" cy="300" r="40"/>
-                            <circle id="c-seg-2" class="colorable-cell uncolored" cx="220" cy="305" r="38"/>
-                            <circle id="c-seg-3" class="colorable-cell uncolored" cx="290" cy="300" r="38"/>
-                            <circle id="c-seg-4" class="colorable-cell uncolored" cx="360" cy="285" r="40"/>
-                            <circle id="c-seg-5" class="colorable-cell uncolored" cx="430" cy="250" r="44"/>
-                            <g id="c-face" pointer-events="none">
-                                <circle cx="445" cy="235" r="4" fill="#334155"/>
-                                <circle cx="470" cy="242" r="4" fill="#334155"/>
-                                <path d="M 452 260 Q 462 266, 470 256" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
-                                <path d="M 440 212 Q 450 160, 475 155" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 455 210 Q 475 165, 500 170" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
-                                <circle cx="475" cy="155" r="5" fill="#334155"/>
-                                <circle cx="500" cy="170" r="5" fill="#334155"/>
-                            </g>
-                        </g>
                     </svg>
                 </div>
             </div>
 
+            <!-- Particle Animation Stack Overlay Layer -->
             <div id="particle-container" class="particle-container"></div>
 
+            <!-- Success Dynamic Interstitial Overlay -->
             <div id="success-banner" class="success-banner hidden" aria-live="polite">
-                <h2 id="success-txt" class="success-message">Beautiful Butterfly! 💖</h2>
+                <h2 class="success-message">Beautiful Butterfly! 💖</h2>
                 <div class="heart-container" aria-hidden="true"></div>
             </div>
 
         </section>
 
+        <!-- Command Palette Controls Console Box -->
         <footer class="controls-section" role="contentinfo">
-            <div id="palette" class="palette-grid" role="radiogroup" aria-label="Color Palette swatches"></div>
+            
+            <!-- Dynamic Grid Selection System -->
+            <div id="palette" class="palette-grid" role="radiogroup" aria-label="Color Palette Swatches">
+                <!-- Color items are auto injected via javascript dynamically -->
+            </div>
+
+            <!-- Action Command Panel Buttons -->
             <div class="actions-panel">
                 <button id="btn-undo" class="action-btn" aria-label="Undo last action">↩️ Undo</button>
-                <button id="btn-random" class="action-btn" aria-label="Magic fill random colors">🎲 Magic Fill</button>
-                <button id="btn-clear" class="action-btn" aria-label="Clear all colors back to white">🧼 Clear All</button>
-                <button id="btn-fly" class="action-btn fly-action" aria-label="Watch animal move to the garden">🚀 Watch Move! ✨</button>
-                <button id="btn-reset-pos" class="action-btn reset-action hidden" aria-label="Paint again">🎨 Paint Again</button>
+                <button id="btn-random" class="action-btn" aria-label="Randomize wing layout colors">🎲 Magic Fill</button>
+                <button id="btn-clear" class="action-btn" aria-label="Reset all cells back to white">🧼 Clear All</button>
+                <button id="btn-fly" class="action-btn fly-action" aria-label="Make your butterfly take off into the air">🚀 Watch Fly! ✨</button>
+                <button id="btn-reset-pos" class="action-btn reset-action hidden" aria-label="Bring the butterfly back to paint again">🎨 Paint Again</button>
             </div>
+
         </footer>
 
     </main>
 
     <script>
+/**
+ * Butterfly Wing Coloring Game - Core System Engine
+ * Fixed Hardware-Accelerated CSS Transform Flight Trajectory Engine
+ */
+
 const State = {
-    selectedAnimal: 'butterfly',
-    selectedColor: '#FF7da7',
-    colorHistory: [],        
+    selectedColor: '#FF7da7', // Balanced Pastel Pink
+    colorHistory: [],
     isMuted: true,
     isHighContrast: false,
     isReducedMotion: false,
     isAnimatingFlight: false,
-    
-    colors: [
-        { name: 'Pink', hex: '#FF7da7' }, { name: 'Purple', hex: '#CE93D8' },
-        { name: 'Blue', hex: '#64B5F6' }, { name: 'Cyan', hex: '#4DD0E1' },
-        { name: 'Green', hex: '#81C784' }, { name: 'Yellow', hex: '#FFF176' },
-        { name: 'Orange', hex: '#FFB74D' }, { name: 'Red', hex: '#E57373' },
-        { name: 'Brown', hex: '#BCAAA4' }, { name: 'White', hex: '#FFFFFF' },
-        { name: 'Gray', hex: '#B0BEC5' }, { name: 'Turquoise', hex: '#4DB6AC' }
-    ],
 
-    meta: {
-        butterfly: { bannerText: 'Beautiful Butterfly! 🦋', soundType: 'chime' },
-        ladybug: { bannerText: 'Lovely Ladybug! 🐞', soundType: 'pop' },
-        snail: { bannerText: 'Sleepy Snail! 🐌', soundType: 'bubble' },
-        bee: { bannerText: 'Happy Bumblebee! 🐝', soundType: 'hum' },
-        caterpillar: { bannerText: 'Wiggling Caterpillar! 🐛', soundType: 'boing' }
-    }
+    // Balanced Saturated Pastels Palette
+    colors: [
+        { name: 'Pink', hex: '#FF7da7' },
+        { name: 'Purple', hex: '#CE93D8' },
+        { name: 'Blue', hex: '#64B5F6' },
+        { name: 'Cyan', hex: '#4DD0E1' },
+        { name: 'Green', hex: '#81C784' },
+        { name: 'Yellow', hex: '#FFF176' },
+        { name: 'Orange', hex: '#FFB74D' },
+        { name: 'Red', hex: '#E57373' },
+        { name: 'Brown', hex: '#BCAAA4' },
+        { name: 'White', hex: '#FFFFFF' },
+        { name: 'Gray', hex: '#B0BEC5' },
+        { name: 'Turquoise', hex: '#4DB6AC' }
+    ]
 };
 
 const AudioEngine = {
     ctx: null,
-    init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
-    
-    playTone(type) {
+
+    init() {
+        if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    },
+
+    playFlutter() {
         if (State.isMuted) return;
         this.init();
+
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
-        if (type === 'pop') {
-            osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
-            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
-            gain.gain.setValueAtTime(0.06, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
-        } else if (type === 'bubble') {
-            osc.type = 'sine'; osc.frequency.setValueAtTime(900, now);
-            osc.frequency.exponentialRampToValueAtTime(300, now + 0.15);
-            gain.gain.setValueAtTime(0.04, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.15);
-        } else if (type === 'hum') {
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(140, now);
-            osc.frequency.linearRampToValueAtTime(120, now + 0.2);
-            gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
-        } else if (type === 'boing') {
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(220, now);
-            osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
-            gain.gain.setValueAtTime(0.06, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
-        } else {
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(80, now);
-            osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
-            gain.gain.setValueAtTime(0.05, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
-        }
-        
-        osc.connect(gain); gain.connect(this.ctx.destination);
-        osc.start(now); osc.stop(now + 0.35);
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
     },
 
-    playSuccessChime() {
+    playChime() {
         if (State.isMuted) return;
         this.init();
+
         const now = this.ctx.currentTime;
-        [523.25, 659.25, 783.99].forEach((f, i) => {
-            const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(f, now + (i * 0.06));
-            gain.gain.setValueAtTime(0.02, now + (i * 0.06)); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4 + (i * 0.05));
-            osc.connect(gain); gain.connect(this.ctx.destination);
-            osc.start(now + (i * 0.06)); osc.stop(now + 0.6);
+        const notes = [523.25, 783.99];
+
+        notes.forEach((freq, index) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (index * 0.05));
+
+            gain.gain.setValueAtTime(0.02, now + (index * 0.05));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + (index * 0.05));
+            osc.stop(now + 0.7);
         });
     }
 };
@@ -647,40 +705,30 @@ const AudioEngine = {
 const DOM = {
     viewport: document.querySelector('.viewport'),
     positioner: document.getElementById('butterfly-positioner'),
-    wrapper: document.getElementById('butterfly-wrapper'),
+    butterflyWrapper: document.getElementById('butterfly-wrapper'),
     palette: document.getElementById('palette'),
     successBanner: document.getElementById('success-banner'),
-    successTxt: document.getElementById('success-txt'),
     targetFlower: document.getElementById('target-flower'),
     particleContainer: document.getElementById('particle-container'),
-    animalSelector: document.getElementById('animal-selector'),
-    
+
     btnUndo: document.getElementById('btn-undo'),
     btnRandom: document.getElementById('btn-random'),
     btnClear: document.getElementById('btn-clear'),
     btnFly: document.getElementById('btn-fly'),
     btnResetPos: document.getElementById('btn-reset-pos'),
-    
+
     btnContrast: document.getElementById('btn-contrast'),
     btnMotion: document.getElementById('btn-motion'),
-    btnMute: document.getElementById('btn-mute')
+    btnMute: document.getElementById('btn-mute'),
+
+    colorableCells: document.querySelectorAll('.colorable-cell')
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     buildPaletteUI();
     attachEventSystems();
-    document.querySelectorAll('.colorable-cell').forEach(cell => {
-        cell.addEventListener('click', (e) => handleCellPaint(e.target));
-    });
-    syncActiveAnimalView();
-});
-
-function syncActiveAnimalView() {
-    DOM.positioner.setAttribute('data-active-animal', State.selectedAnimal);
-    DOM.successTxt.innerText = State.meta[State.selectedAnimal].bannerText;
-    State.colorHistory = [];
     resetPositionsToDefault();
-}
+});
 
 function buildPaletteUI() {
     DOM.palette.innerHTML = '';
@@ -689,23 +737,45 @@ function buildPaletteUI() {
         swatch.className = 'color-swatch';
         swatch.setAttribute('role', 'radio');
         swatch.setAttribute('aria-label', color.name);
-        swatch.style.backgroundColor = color.hex;
+        swatch.setAttribute('aria-checked', idx === 0 ? 'true' : 'false');
+
         if (idx === 0) swatch.classList.add('selected');
-        swatch.addEventListener('click', () => {
-            State.selectedColor = color.hex;
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-            swatch.classList.add('selected');
-            AudioEngine.playTone('flutter');
-        });
+
+        swatch.addEventListener('click', () => selectColor(color.hex, swatch));
         DOM.palette.appendChild(swatch);
     });
 }
 
+function selectColor(hex, targetElement) {
+    State.selectedColor = hex;
+    AudioEngine.playFlutter();
+
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+        swatch.classList.remove('selected');
+        swatch.setAttribute('aria-checked', 'false');
+    });
+
+    targetElement.classList.add('selected');
+    targetElement.setAttribute('aria-checked', 'true');
+
+    if (!State.isReducedMotion) {
+        const bounds = targetElement.getBoundingClientRect();
+        const pBounds = DOM.particleContainer.getBoundingClientRect();
+        const cX = (bounds.left - pBounds.left) + (bounds.width / 2);
+        const cY = (bounds.top - pBounds.top) + (bounds.height / 2);
+        for (let i = 0; i < 4; i++) createSparkleParticle(cX, cY);
+    }
+}
+
 function attachEventSystems() {
-    DOM.animalSelector.addEventListener('change', (e) => {
-        if (State.isAnimatingFlight) return;
-        State.selectedAnimal = e.target.value;
-        syncActiveAnimalView();
+    DOM.colorableCells.forEach(cell => {
+        cell.addEventListener('click', (e) => handleCellPaint(e.target));
+        cell.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                handleCellPaint(e.target);
+            }
+        });
     });
 
     DOM.btnUndo.addEventListener('click', executeUndoOp);
@@ -714,180 +784,269 @@ function attachEventSystems() {
     DOM.btnFly.addEventListener('click', executeFlightTrajectory);
     DOM.btnResetPos.addEventListener('click', resetPositionsToDefault);
 
-    DOM.btnMute.addEventListener('click', () => {
-        State.isMuted = !State.isMuted;
-        DOM.btnMute.setAttribute('aria-pressed', State.isMuted ? 'true' : 'false');
-        DOM.btnMute.innerHTML = State.isMuted ? '🔇 Sound Off' : '🔊 Sound On';
-        if (!State.isMuted) { AudioEngine.init(); AudioEngine.playSuccessChime(); }
-    });
-
-    DOM.btnContrast.addEventListener('click', () => {
-        State.isHighContrast = !State.isHighContrast;
-        document.documentElement.setAttribute('data-a11y-contrast', State.isHighContrast ? 'true' : 'false');
-        DOM.btnContrast.setAttribute('aria-pressed', State.isHighContrast ? 'true' : 'false');
-    });
-
-    DOM.btnMotion.addEventListener('click', () => {
-        State.isReducedMotion = !State.isReducedMotion;
-        document.documentElement.setAttribute('data-a11y-motion', State.isReducedMotion ? 'true' : 'false');
-        DOM.btnMotion.setAttribute('aria-pressed', State.isReducedMotion ? 'true' : 'false');
-    });
+    DOM.btnMute.addEventListener('click', toggleMutePreference);
+    DOM.btnContrast.addEventListener('click', toggleHighContrastPreference);
+    DOM.btnMotion.addEventListener('click', toggleReducedMotionPreference);
 }
 
 function handleCellPaint(cellElement) {
     if (State.isAnimatingFlight) return;
+
     const previousColor = cellElement.style.fill || getComputedStyle(cellElement).fill;
     const targetColor = State.selectedColor;
-    
+
     if (compareRgbColors(previousColor, targetColor)) return;
     cellElement.classList.remove('uncolored');
 
-    State.colorHistory.push({ elementId: cellElement.id, fromColor: previousColor, toColor: targetColor });
+    State.colorHistory.push({
+        elementId: cellElement.id,
+        fromColor: previousColor,
+        toColor: targetColor
+    });
+
     cellElement.style.fill = targetColor;
-    AudioEngine.playTone(State.meta[State.selectedAnimal].soundType);
+    AudioEngine.playFlutter();
 }
 
 function executeUndoOp() {
     if (State.colorHistory.length === 0 || State.isAnimatingFlight) return;
+
     const lastAction = State.colorHistory.pop();
     const cell = document.getElementById(lastAction.elementId);
+
     if (cell) {
         cell.style.fill = lastAction.fromColor;
-        if (lastAction.fromColor === '' || lastAction.fromColor === 'rgb(255, 255, 255)') cell.classList.add('uncolored');
-        AudioEngine.playTone('flutter');
+        if (lastAction.fromColor === '' || lastAction.fromColor === 'rgb(255, 255, 255)') {
+            cell.classList.add('uncolored');
+        }
+        AudioEngine.playFlutter();
     }
 }
 
 function executeRandomMagicFill() {
     if (State.isAnimatingFlight) return;
+
     const batchActions = [];
-    document.querySelectorAll(`#model-${State.selectedAnimal} .colorable-cell`).forEach(cell => {
+    DOM.colorableCells.forEach(cell => {
         const prev = cell.style.fill || getComputedStyle(cell).fill;
         const randomHex = State.colors[Math.floor(Math.random() * State.colors.length)].hex;
+
         cell.classList.remove('uncolored');
         cell.style.fill = randomHex;
         batchActions.push({ elementId: cell.id, fromColor: prev });
     });
+
     State.colorHistory.push({ isComposite: true, actions: batchActions });
-    AudioEngine.playSuccessChime();
+    AudioEngine.playChime();
 }
 
 function executeClearAllWings() {
     if (State.isAnimatingFlight) return;
-    document.querySelectorAll(`#model-${State.selectedAnimal} .colorable-cell`).forEach(cell => {
-        cell.style.fill = ''; cell.classList.add('uncolored');
+
+    DOM.colorableCells.forEach(cell => {
+        cell.style.fill = '';
+        cell.classList.add('uncolored');
     });
+
     State.colorHistory = [];
-    AudioEngine.playTone('flutter');
+    AudioEngine.playFlutter();
 }
 
+function clampFlightTranslation(baseCenterX, baseCenterY, targetDeltaX, targetDeltaY, scale) {
+    const viewportRect = DOM.viewport.getBoundingClientRect();
+    const positionerRect = DOM.positioner.getBoundingClientRect();
+    const margin = 12;
+
+    const halfWidth = (positionerRect.width * scale) / 2;
+    const halfHeight = (positionerRect.height * scale) / 2;
+
+    const minCenterX = viewportRect.left + margin + halfWidth;
+    const maxCenterX = viewportRect.right - margin - halfWidth;
+    const minCenterY = viewportRect.top + margin + halfHeight;
+    const maxCenterY = viewportRect.bottom - margin - halfHeight;
+
+    const rawCenterX = baseCenterX + targetDeltaX;
+    const rawCenterY = baseCenterY + targetDeltaY;
+
+    const clampedCenterX = Math.min(maxCenterX, Math.max(minCenterX, rawCenterX));
+    const clampedCenterY = Math.min(maxCenterY, Math.max(minCenterY, rawCenterY));
+
+    return {
+        x: clampedCenterX - baseCenterX,
+        y: clampedCenterY - baseCenterY
+    };
+}
+
+/**
+ * Hardware-Accelerated Safe Delta Transform Flight Engine
+ * Avoids setting absolute layout top/left boundaries to keep operations rock solid
+ */
 function executeFlightTrajectory() {
     if (State.isAnimatingFlight) return;
     State.isAnimatingFlight = true;
-    
-    DOM.animalSelector.disabled = true;
+
     DOM.btnFly.classList.add('hidden');
-    DOM.btnUndo.disabled = true; DOM.btnClear.disabled = true; DOM.btnRandom.disabled = true;
-    DOM.wrapper.classList.remove('hovering');
+    DOM.btnUndo.disabled = true;
+    DOM.btnClear.disabled = true;
+    DOM.btnRandom.disabled = true;
 
-    const bRect = DOM.positioner.getBoundingClientRect();
-    const fRect = DOM.targetFlower.getBoundingClientRect();
-    const bCX = bRect.left + (bRect.width / 2);
-    const bCY = bRect.top + (bRect.height / 2);
-    const fCX = fRect.left + (fRect.width / 2);
+    DOM.butterflyWrapper.classList.remove('hovering');
+    DOM.butterflyWrapper.classList.add('flapping');
 
-    let fCY = fRect.top + (fRect.height * 0.25);
-    if (State.selectedAnimal === 'snail' || State.selectedAnimal === 'caterpillar') {
-        fCY = fRect.top + (fRect.height * 0.75); 
-    }
+    // 1. Calculate pixel delta vectors between the exact centers of the body and the flower
+    const butterflyRect = DOM.positioner.getBoundingClientRect();
+    const flowerRect = DOM.targetFlower.getBoundingClientRect();
 
-    const dX = fCX - bCX;
-    const dY = fCY - bCY;
+    const butterflyCenterX = butterflyRect.left + (butterflyRect.width / 2);
+    const butterflyCenterY = butterflyRect.top + (butterflyRect.height / 2);
+    const flowerCenterX = flowerRect.left + (flowerRect.width / 2);
+    const flowerCenterY = flowerRect.top + (flowerRect.height * 0.25); // Land comfortably near the top center petals
 
-    if (State.selectedAnimal === 'butterfly') DOM.wrapper.classList.add('flapping');
-    if (State.selectedAnimal === 'bee') DOM.wrapper.classList.add('buzzing');
-    if (State.selectedAnimal === 'snail') DOM.wrapper.classList.add('crawling-snail');
-    if (State.selectedAnimal === 'caterpillar') DOM.wrapper.classList.add('crawling-caterpillar');
+    const deltaX = flowerCenterX - butterflyCenterX;
+    const deltaY = flowerCenterY - butterflyCenterY;
+    const safeLanding = clampFlightTranslation(butterflyCenterX, butterflyCenterY, deltaX, deltaY, 0.48);
 
+    // 2. Sparkle Particle Generation Trail
     let particleTimer = setInterval(() => {
         if (!State.isReducedMotion) {
-            const wR = DOM.wrapper.getBoundingClientRect();
-            const pR = DOM.particleContainer.getBoundingClientRect();
-            createSparkleParticle((wR.left - pR.left) + (wR.width/2), (wR.top - pR.top) + (wR.height/2));
+            const wrapRect = DOM.butterflyWrapper.getBoundingClientRect();
+            const parentRect = DOM.particleContainer.getBoundingClientRect();
+            const originX = (wrapRect.left - parentRect.left) + (wrapRect.width / 2);
+            const originY = (wrapRect.top - parentRect.top) + (wrapRect.height / 2);
+            createSparkleParticle(originX, originY);
         }
     }, 80);
 
-    let soundTimer = setInterval(() => {
-        AudioEngine.playTone(State.meta[State.selectedAnimal].soundType);
-    }, State.selectedAnimal === 'bee' ? 140 : 250);
+    let audioTimer = setInterval(() => {
+        AudioEngine.playFlutter();
+    }, 220);
 
-    DOM.positioner.style.transition = State.isReducedMotion ? 'transform 0.5s ease' : 'transform 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    
-    requestAnimationFrame(() => {
-        DOM.positioner.style.transform = `translate(calc(-50% + ${dX}px), calc(-50% + ${dY}px)) scale(0.46)`;
-    });
+    // 3. Apply smooth hardware-accelerated Bezier flight path
+    if (State.isReducedMotion) {
+        DOM.positioner.style.transition = 'transform 0.5s ease-out';
+        DOM.positioner.style.transform = `translate(calc(-50% + ${safeLanding.x}px), calc(-50% + ${safeLanding.y}px)) scale(0.48) rotate(6deg)`;
+        handleFlightArrivalCompletion(particleTimer, audioTimer);
+    } else {
+        const arcLift = Math.min(90, Math.max(40, Math.abs(safeLanding.x) * 0.16));
+        const midPoint = clampFlightTranslation(butterflyCenterX, butterflyCenterY, safeLanding.x * 0.55, (safeLanding.y * 0.45) - arcLift, 0.66);
 
-    setTimeout(() => {
-        clearInterval(particleTimer); clearInterval(soundTimer);
-        DOM.wrapper.className = 'animal-wrapper'; 
-        DOM.positioner.style.transform += ' rotate(5deg)';
-        AudioEngine.playSuccessChime();
-        DOM.successBanner.classList.remove('hidden');
-        if (!State.isReducedMotion) generateHeartsBurst();
-        DOM.btnResetPos.classList.remove('hidden');
-    }, State.isReducedMotion ? 550 : 4555);
+        // Arc stage 1: rise and bank
+        DOM.positioner.style.transition = 'transform 2.15s cubic-bezier(0.32, 0.72, 0.2, 1)';
+        requestAnimationFrame(() => {
+            DOM.positioner.style.transform = `translate(calc(-50% + ${midPoint.x}px), calc(-50% + ${midPoint.y}px)) scale(0.66) rotate(-8deg)`;
+        });
+
+        // Arc stage 2: descend and settle on flower
+        setTimeout(() => {
+            DOM.positioner.style.transition = 'transform 2.35s cubic-bezier(0.22, 0.61, 0.36, 1)';
+            DOM.positioner.style.transform = `translate(calc(-50% + ${safeLanding.x}px), calc(-50% + ${safeLanding.y}px)) scale(0.48) rotate(5deg)`;
+        }, 2180);
+
+        setTimeout(() => {
+            handleFlightArrivalCompletion(particleTimer, audioTimer);
+        }, 4620);
+    }
+}
+
+function handleFlightArrivalCompletion(sparkleTimer, soundTimer) {
+    clearInterval(sparkleTimer);
+    clearInterval(soundTimer);
+
+    DOM.butterflyWrapper.classList.remove('flapping');
+
+    AudioEngine.playChime();
+    DOM.successBanner.classList.remove('hidden');
+
+    if (!State.isReducedMotion) {
+        generateCompletionHeartsBurst();
+    }
+    DOM.btnResetPos.classList.remove('hidden');
 }
 
 function resetPositionsToDefault() {
     DOM.successBanner.classList.add('hidden');
     DOM.btnResetPos.classList.add('hidden');
-    
+
+    // Smoothly restore back to default inline centering attributes
     DOM.positioner.style.transition = 'none';
     DOM.positioner.style.transform = 'translate(-50%, -50%) scale(1)';
-    DOM.wrapper.className = 'animal-wrapper hovering';
-    
+
     DOM.particleContainer.innerHTML = '';
-    
-    const heartContainer = document.querySelector('.heart-container');
-    if(heartContainer) heartContainer.innerHTML = '';
+    document.querySelector('.heart-container').innerHTML = '';
 
     setTimeout(() => {
+        DOM.butterflyWrapper.classList.add('hovering');
         State.isAnimatingFlight = false;
-        DOM.animalSelector.disabled = false;
+
         DOM.btnFly.classList.remove('hidden');
-        DOM.btnUndo.disabled = false; DOM.btnClear.disabled = false; DOM.btnRandom.disabled = false;
+        DOM.btnUndo.disabled = false;
+        DOM.btnClear.disabled = false;
+        DOM.btnRandom.disabled = false;
     }, 150);
 }
 
 function createSparkleParticle(x, y) {
-    const p = document.createElement('div'); p.className = 'sparkle';
-    p.style.left = `${x}px`; p.style.top = `${y}px`;
-    p.style.setProperty('--dx', `${(Math.random() - 0.5) * 120}px`);
-    p.style.setProperty('--dy', `${(Math.random() * 60) + 30}px`);
+    const p = document.createElement('div');
+    p.className = 'sparkle';
+    p.style.left = `${x}px`;
+    p.style.top = `${y}px`;
+
+    const dx = (Math.random() - 0.5) * 120;
+    const dy = (Math.random() * 60) + 30;
+
+    p.style.setProperty('--dx', `${dx}px`);
+    p.style.setProperty('--dy', `${dy}px`);
+
     DOM.particleContainer.appendChild(p);
     p.addEventListener('animationend', () => p.remove());
 }
 
-function generateHeartsBurst() {
-    const container = document.querySelector('.heart-container'); 
-    if(!container) return;
+function generateCompletionHeartsBurst() {
+    const container = document.querySelector('.heart-container');
     container.innerHTML = '';
-    const tokens = ['❤️', '✨', '💖', '⭐', '🌸'];
+    const heartTokens = ['❤️', '✨', '💖', '⭐'];
+
     for (let i = 0; i < 10; i++) {
-        const h = document.createElement('span'); h.className = 'heart';
-        h.innerText = tokens[Math.floor(Math.random() * tokens.length)];
-        h.style.left = `${Math.random() * 80 + 10}%`; h.style.top = `${Math.random() * 30 + 50}%`;
-        h.style.animationDelay = `${Math.random() * 0.5}s`; container.appendChild(h);
+        const h = document.createElement('span');
+        h.className = 'heart';
+        h.innerText = heartTokens[Math.floor(Math.random() * heartTokens.length)];
+        h.style.left = `${Math.random() * 80 + 10}%`;
+        h.style.top = `${Math.random() * 30 + 50}%`;
+        h.style.animationDelay = `${Math.random() * 0.5}s`;
+        container.appendChild(h);
     }
+}
+
+function toggleMutePreference() {
+    State.isMuted = !State.isMuted;
+    DOM.btnMute.setAttribute('aria-pressed', State.isMuted ? 'true' : 'false');
+    DOM.btnMute.innerHTML = State.isMuted ? '<span class="icon">🔇</span> Sound Off' : '<span class="icon">🔊</span> Sound On';
+    if (!State.isMuted) {
+        AudioEngine.init();
+        AudioEngine.playChime();
+    }
+}
+
+function toggleHighContrastPreference() {
+    State.isHighContrast = !State.isHighContrast;
+    document.documentElement.setAttribute('data-a11y-contrast', State.isHighContrast ? 'true' : 'false');
+    DOM.btnContrast.setAttribute('aria-pressed', State.isHighContrast ? 'true' : 'false');
+}
+
+function toggleReducedMotionPreference() {
+    State.isReducedMotion = !State.isReducedMotion;
+    document.documentElement.setAttribute('data-a11y-motion', State.isReducedMotion ? 'true' : 'false');
+    DOM.btnMotion.setAttribute('aria-pressed', State.isReducedMotion ? 'true' : 'false');
 }
 
 function compareRgbColors(rgb1, hex2) {
     if (!rgb1 || !hex2) return false;
-    const div = document.createElement('div'); div.style.color = hex2;
-    document.body.appendChild(div); 
-    const res = getComputedStyle(div).color === rgb1;
-    document.body.removeChild(div); 
-    return res;
+    const div = document.createElement('div');
+    div.style.color = hex2;
+    document.body.appendChild(div);
+    const normalizedRgb2 = getComputedStyle(div).color;
+    document.body.removeChild(div);
+    return rgb1 === normalizedRgb2;
 }
     </script>
 </body>
