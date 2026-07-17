@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magical Garden Animal Coloring Room</title>
+    <style>
+/* ==========================================================================
+   CSS Token Matrix: Rich Pastel Balanced High-Contrast Configuration
+   ========================================================================== */
+:root {
+    --bg-sky: #C2E7FF;
+    --bg-controls: #F8FAFC;
+    --border-main: #94A3B8;
+
+    --text-primary: #1E293B;
+    --text-success: #DB2777;
+
+    --stroke-animal: #1E293B;
+    --cell-default: #FFFFFF;
+    --focus-ring: #3B82F6;
+
+    /* Soft but Rich Balanced Color Palette */
+    --color-1: #FF7da7; 
+    --color-2: #CE93D8; 
+    --color-3: #64B5F6; 
+    --color-4: #4DD0E1; 
+    --color-5: #81C784; 
+    --color-6: #FFF176; 
+    --color-7: #FFB74D; 
+    --color-8: #E57373; 
+    --color-9: #BCAAA4; 
+    --color-10: #FFFFFF; 
+    --color-11: #B0BEC5; 
+    --color-12: #4DB6AC; 
+
+    --duration-sway: 4.2s;
+    --duration-drift: 24s;
+    --duration-flap: 0.8s;
+    --transition-color: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    --font-family: 'Comic Sans MS', 'Chalkboard SE', 'Open Sans', system-ui, sans-serif;
+}
+
+[data-a11y-contrast="true"] {
+    --bg-sky: #FFFFFF;
+    --bg-controls: #FFFFFF;
+    --border-main: #000000;
+    --text-primary: #000000;
+    --stroke-animal: #000000;
+    --focus-ring: #0000FF;
+    --text-success: #FF0055;
+}
+
+[data-a11y-motion="true"] {
+    --duration-sway: 0s !important;
+    --duration-drift: 0s !important;
+}
+
+/* ==========================================================================
+   Global Normalize Elements
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 16px;
+    line-height: 1.4;
+    background-color: var(--bg-controls);
+    color: var(--text-primary);
+    overflow: hidden;
+    user-select: none;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.utility-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #FFFFFF;
+    border-bottom: 3px solid var(--border-main);
+    z-index: 100;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.a11y-controls { display: flex; gap: 12px; align-items: center; }
+
+.select-animal-dropdown {
+    min-height: 52px;
+    padding: 8px 16px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #1E293B;
+    background-color: #F0FDF4;
+    border: 3.5px solid #2E7D32;
+    border-radius: 25px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.utility-btn {
+    min-height: 52px; padding: 8px 18px;
+    font-size: 1.05rem; font-weight: bold; color: #334155;
+    background-color: #F1F5F9; border: 3px solid var(--border-main);
+    border-radius: 25px; cursor: pointer; transition: transform 0.1s ease;
+}
+.utility-btn:active { transform: scale(0.96); }
+.utility-btn[aria-pressed="true"] {
+    background-color: #64748B; border-color: #475569; color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Scenic Canvas Environment Configurations
+   ========================================================================== */
+.game-container { flex: 1; display: flex; flex-direction: column; position: relative; }
+
+.viewport {
+    flex: 4; min-height: 58vh; position: relative; overflow: hidden;
+    display: flex; justify-content: center; align-items: center;
+    border-bottom: 5px solid var(--border-main); background-color: var(--bg-sky);
+}
+
+.garden-background {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; display: flex; flex-direction: column; justify-content: flex-end;
+}
+
+.sky-gradient {
+    position: absolute; top: 0; left: 0; width: 100%; height: 74%;
+    background:
+        radial-gradient(circle at 16% 14%, rgba(255, 252, 220, 0.55), transparent 32%),
+        radial-gradient(circle at 78% 22%, rgba(181, 234, 255, 0.45), transparent 40%),
+        linear-gradient(to bottom, #96D6FF 0%, #CFEFFF 45%, #EAFBFF 78%, #F4FFF8 100%);
+    z-index: 1;
+}
+
+.sun-glow {
+    position: absolute; top: -30px; left: -30px; width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,253,231,0.9) 0%, rgba(255,245,157,0.4) 50%, rgba(255,255,255,0) 70%);
+    border-radius: 50%; z-index: 1;
+}
+
+.landscape-hill { position: absolute; border-radius: 45%; z-index: 2; }
+.hill-distant {
+    width: 110%; height: 260px; bottom: 40px; left: -5%;
+    background: linear-gradient(180deg, #8BCF7A 0%, #63B56A 100%);
+    opacity: 0.75;
+}
+.hill-mid {
+    width: 120%; height: 240px; bottom: 25px; right: -10%;
+    background: linear-gradient(180deg, #6AC163 0%, #43A047 100%);
+    opacity: 0.85;
+}
+.hill-close {
+    width: 105%; height: 210px; bottom: 10px; left: -2%;
+    background: linear-gradient(180deg, #57AF58 0%, #2E7D32 100%);
+}
+
+.ground-floor {
+    width: 100%; height: 60px;
+    background: linear-gradient(180deg, #3A9F46 0%, #2E7D32 100%);
+    position: relative; z-index: 3;
+}
+
+.ladybug-leaf {
+    position: absolute; bottom: 40px; right: 8%; width: 150px; height: 60px;
+    background: #4CAF50; border: 4px solid #2E7D32; border-radius: 0 50% 0 50%;
+    transform: rotate(-15deg); z-index: 3;
+}
+
+.grass-cluster {
+    position: absolute; bottom: 50px; width: 20px; border-radius: 12px 12px 0 0;
+    background-color: #2E7D32; transform-origin: bottom center;
+}
+.gc-1 { height: 40px; left: 10%; animation: swayGrass var(--duration-sway) ease-in-out infinite; }
+.gc-2 { height: 30px; left: 40%; animation: swayGrass calc(var(--duration-sway) * 1.3) ease-in-out infinite -0.6s; }
+.gc-3 { height: 48px; left: 80%; animation: swayGrass calc(var(--duration-sway) * 0.9) ease-in-out infinite -1.2s; }
+
+.target-flower {
+    width: 120px; height: 150px; position: absolute; bottom: 5px; right: 10%;
+    transform-origin: bottom center; animation: swayFlower var(--duration-sway) ease-in-out infinite; z-index: 4;
+}
+.flower-petals-sway { transform-origin: 80px 98px; }
+
+.cloud { position: absolute; background: #FFFFFF; border-radius: 40px; opacity: 0.92; z-index: 1; }
+.cloud::before, .cloud::after { content: ''; position: absolute; background: #FFFFFF; border-radius: 50%; }
+.cloud-1 { width: 130px; height: 42px; top: 15%; left: 5%; animation: driftCloud var(--duration-drift) linear infinite; }
+.cloud-1::before { width: 55px; height: 55px; top: -25px; left: 15px; }
+.cloud-1::after { width: 75px; height: 75px; top: -40px; left: 45px; }
+.cloud-2 { width: 160px; height: 50px; top: 32%; right: 5%; animation: driftCloud calc(var(--duration-drift) * 1.3) linear infinite reverse; }
+.cloud-2::before { width: 65px; height: 65px; top: -32px; left: 20px; }
+.cloud-2::after { width: 85px; height: 85px; top: -45px; left: 55px; }
+.cloud-3 { width: 90px; height: 30px; top: 8%; right: 35%; opacity: 0.6; animation: driftCloud calc(var(--duration-drift) * 1.6) linear infinite; }
+
+/* ==========================================================================
+   Unified Master Animal Canvas Viewport Management Layouts
+   ========================================================================== */
+.animal-positioner-center {
+    position: absolute;
+    width: 480px; height: 400px;
+    z-index: 20;
+    display: flex; justify-content: center; align-items: center;
+    left: 50%; top: 46%;
+    transform: translate(-50%, -50%);
+}
+
+.animal-positioner-center.in-motion {
+    transition: all 4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+.animal-wrapper {
+    width: 100%; height: 100%;
+    transform-origin: center center;
+}
+.animal-wrapper.hovering { animation: gentleBob var(--duration-sway) ease-in-out infinite; }
+
+svg#animal-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Visibility Control Layer System */
+.animal-model {
+    display: none;
+}
+
+/* Visibility Routing Flags */
+[data-active-animal="butterfly"] #model-butterfly { display: block; }
+[data-active-animal="ladybug"] #model-ladybug { display: block; }
+[data-active-animal="snail"] #model-snail { display: block; }
+[data-active-animal="bee"] #model-bee { display: block; }
+[data-active-animal="caterpillar"] #model-caterpillar { display: block; }
+
+/* Global Colorable Vectors Definition */
+.colorable-cell {
+    fill: var(--cell-default); stroke: var(--stroke-animal);
+    stroke-width: 5px; stroke-linejoin: round; cursor: pointer;
+    transition: fill var(--transition-color), stroke-width 0.15s ease;
+}
+
+.colorable-cell.uncolored {
+    animation: implicitPulse 2s ease-in-out infinite;
+    stroke-dasharray: 8, 4;
+}
+
+.colorable-cell:hover, .colorable-cell:active { stroke-width: 6.5px; }
+.colorable-cell.wing-base, .colorable-cell.shell-base, .colorable-cell.body-base { stroke-width: 7px; fill: #FCFCFC; }
+.colorable-cell:focus-visible { stroke: var(--focus-ring); stroke-width: 9px; stroke-dasharray: none; outline: none; }
+
+/* Custom Animal Animation Flap States */
+#lw-group, #rw-group { transform-origin: 300px 250px; }
+.flapping #lw-group { animation: flapLeft 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+.flapping #rw-group { animation: flapRight 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+
+#bee-lw, #bee-rw { transform-origin: 300px 220px; }
+.buzzing #bee-lw { animation: flapLeft 0.15s linear infinite; }
+.buzzing #bee-rw { animation: flapRight 0.15s linear infinite; }
+
+.crawling-snail { animation: snailStretch 1s ease-in-out infinite; }
+.crawling-caterpillar { animation: caterpillarInch 0.9s ease-in-out infinite; }
+
+/* ==========================================================================
+   Overlay & Controls UI Console Interface Layouts
+   ========================================================================== */
+.particle-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 18; }
+.sparkle {
+    position: absolute; width: 16px; height: 16px; background-color: #FFF59D;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    animation: fadeOutParticle 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.controls-section {
+    flex: 1.3; background-color: var(--bg-controls);
+    display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;
+    padding: 14px 18px; gap: 10px; z-index: 50; border-top: 4px solid var(--border-main);
+}
+
+.palette-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; width: 100%; max-width: 620px; }
+@media (max-width: 600px) { .palette-grid { grid-template-columns: repeat(4, 1fr); gap: 9px; } }
+
+.color-swatch {
+    aspect-ratio: 1; min-width: 46px; border-radius: 50%; border: 4px solid #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; position: relative;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); outline: none;
+}
+.color-swatch.selected { transform: scale(1.15); border-color: #334155; box-shadow: 0 0 0 4px var(--focus-ring); }
+
+.actions-panel { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; max-width: 920px; }
+
+.action-btn {
+    min-height: 64px; min-width: 130px; padding: 12px 28px;
+    font-size: 1.25rem; font-weight: 800; color: #334155; background-color: #FFFFFF;
+    border: 3.5px solid var(--border-main); border-radius: 24px; cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.15s ease;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.action-btn:active { transform: scale(0.95); }
+.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.fly-action {
+    background-color: #81C784; border-color: #4CAF50; color: #1B5E20; min-width: 280px; text-transform: uppercase;
+    animation: callToActionPulse 2.5s infinite;
+}
+.reset-action { background-color: #4DD0E1; border-color: #26A69A; color: #004D40; min-width: 240px; }
+
+.success-banner {
+    position: absolute; top: 15%; background-color: rgba(255, 255, 255, 0.98);
+    padding: 24px 50px; border-radius: 40px; border: 6px solid var(--text-success);
+    text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.08); z-index: 100;
+    pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.success-banner.hidden { opacity: 0; transform: scale(0.5) translateY(-40px); }
+.success-message { font-size: 3rem; color: var(--text-success); }
+.heart { position: absolute; font-size: 36px; animation: floatingHeart 2.5s ease-out infinite; opacity: 0; }
+
+.hidden { display: none !important; }
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .utility-bar { padding: 10px 12px; gap: 8px; }
+    .animal-positioner-center { width: min(92vw, 420px); height: min(64vw, 340px); }
+    .action-btn { min-height: 52px; font-size: 1.05rem; padding: 10px 16px; }
+    .fly-action, .reset-action { min-width: 210px; }
+    .success-message { font-size: 2rem; }
+}
+
+/* ==========================================================================
+   Animation Timelines Matrix
+   ========================================================================== */
+@keyframes gentleBob {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(0.4deg); }
+}
+@keyframes flapLeft { 0%, 100% { transform: scale3d(1,1,1); } 50% { transform: scale3d(0.22, 1, 1); } }
+@keyframes flapRight { 0%, 100% { transform: scale3d(1,1,1); } 50% { transform: scale3d(0.22, 1, 1); } }
+@keyframes swayFlower { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(2deg); } }
+@keyframes swayGrass { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
+@keyframes driftCloud { 0% { transform: translateX(0); } 50% { transform: translateX(35px); } 100% { transform: translateX(0); } }
+@keyframes fadeOutParticle { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; } }
+@keyframes floatingHeart { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 20% { opacity: 0.95; } 100% { transform: translateY(-100px) scale(1.4); opacity: 0; } }
+@keyframes implicitPulse { 0%, 100% { stroke: var(--stroke-animal); stroke-opacity: 1; } 50% { stroke: #3B82F6; stroke-opacity: 0.5; } }
+@keyframes callToActionPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+/* Insect Locomotion Stretch Animations */
+@keyframes snailStretch {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(1.06) scaleY(0.96); }
+}
+@keyframes caterpillarInch {
+    0%, 100% { transform: scaleX(1) translateY(0); }
+    50% { transform: scaleX(0.88) scaleY(1.12) translateY(-8px); }
+}
+    </style>
+</head>
+<body>
+
+    <!-- Accessible Utility Header with Animal Selection Switcher -->
+    <header class="utility-bar" role="banner">
+        <div class="a11y-controls">
+            <select id="animal-selector" class="select-animal-dropdown" aria-label="Select an animal to paint">
+                <option value="butterfly">🦋 Beautiful Butterfly</option>
+                <option value="ladybug">🐞 Dotted Ladybug</option>
+                <option value="snail">🐌 Slow Snail</option>
+                <option value="bee">🐝 Fuzzy Bumblebee</option>
+                <option value="caterpillar">🐛 Wiggling Caterpillar</option>
+            </select>
+            <button id="btn-contrast" class="utility-btn" aria-pressed="false">👁️ High Contrast</button>
+            <button id="btn-motion" class="utility-btn" aria-pressed="false">🐢 Slow Motion</button>
+        </div>
+        <button id="btn-mute" class="utility-btn audio-btn" aria-pressed="true">
+            <span class="icon" aria-hidden="true">🔇</span> Sound Off
+        </button>
+    </header>
+
+    <main class="game-container">
+        
+        <section class="viewport" aria-label="Coloring Studio Room">
+            
+            <div class="garden-background">
+                <div class="sky-gradient">
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                    <div class="cloud cloud-3"></div>
+                    <div class="sun-glow"></div>
+                </div>
+                
+                <div class="landscape-hill hill-distant"></div>
+                <div class="landscape-hill hill-mid"></div>
+                <div class="landscape-hill hill-close"></div>
+                <div class="ladybug-leaf"></div>
+                
+                <div class="ground-floor">
+                    <div class="grass-cluster gc-1"></div>
+                    <div class="grass-cluster gc-2"></div>
+                    <div class="grass-cluster gc-3"></div>
+                </div>
+
+                <div id="target-flower" class="target-flower" role="img" aria-label="Target flower">
+                    <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 80 120 Q 75 160, 80 200" fill="none" stroke="#2E7D32" stroke-width="9" stroke-linecap="round"/>
+                        <path d="M 80 150 Q 55 145, 45 130" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round"/>
+                        <g class="flower-petals-sway">
+                            <circle cx="80" cy="65" r="30" fill="#FF8A80"/>
+                            <circle cx="45" cy="90" r="30" fill="#FF8A80"/>
+                            <circle cx="60" cy="135" r="30" fill="#FF8A80"/>
+                            <circle cx="100" cy="135" r="30" fill="#FF8A80"/>
+                            <circle cx="115" cy="90" r="30" fill="#FF8A80"/>
+                            <circle cx="80" cy="98" r="28" fill="#FFE082"/>
+                            <circle cx="70" cy="94" r="3.5" fill="#374151"/>
+                            <circle cx="90" cy="94" r="3.5" fill="#374151"/>
+                            <path d="M 72 106 Q 80 114, 88 106" fill="none" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Preloaded Static Layout Model Matrix Viewport -->
+            <div id="butterfly-positioner" class="butterfly-positioner-center" data-active-animal="butterfly">
+                <div id="butterfly-wrapper" class="animal-wrapper hovering">
+                    <svg id="animal-svg" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" filter="url(#natural-shadow)">
+                        <defs>
+                            <filter id="natural-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#1e293b" flood-opacity="0.12"/>
+                            </filter>
+                        </defs>
+                        
+                        <!-- 1. BUTTERFLY LAYER -->
+                        <g id="model-butterfly" class="animal-model">
+                            <g id="lw-group">
+                                <path id="b-lw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 200 100, 50 120, 50 220 C 50 320, 180 340, 220 380 C 250 410, 290 430, 300 400 Z"/>
+                                <path id="b-lw-1" class="colorable-cell uncolored" d="M 280 230 C 210 140, 110 150, 80 210 C 110 240, 200 230, 280 230 Z"/>
+                                <path id="b-lw-2" class="colorable-cell uncolored" d="M 74 225 C 64 260, 100 300, 150 300 C 170 270, 220 250, 274 242 C 190 240, 110 250, 74 225 Z"/>
+                                <path id="b-lw-3" class="colorable-cell uncolored" d="M 160 312 C 110 320, 130 360, 210 375 C 230 350, 240 320, 268 260 C 210 270, 180 290, 160 312 Z"/>
+                                <path id="b-lw-4" class="colorable-cell uncolored" d="M 222 380 C 250 400, 275 405, 286 385 C 282 340, 280 300, 276 262 C 250 310, 240 340, 222 380 Z"/>
+                            </g>
+                            <g id="rw-group">
+                                <path id="b-rw-base" class="colorable-cell wing-base uncolored" d="M 300 250 C 400 100, 550 120, 550 220 C 550 320, 420 340, 380 380 C 350 410, 310 430, 300 400 Z"/>
+                                <path id="b-rw-1" class="colorable-cell uncolored" d="M 320 230 C 390 140, 490 150, 520 210 C 490 240, 400 230, 320 230 Z"/>
+                                <path id="b-rw-2" class="colorable-cell uncolored" d="M 526 225 C 536 260, 500 300, 450 300 C 430 270, 380 250, 326 242 C 410 240, 490 250, 526 225 Z"/>
+                                <path id="b-rw-3" class="colorable-cell uncolored" d="M 440 312 C 490 320, 470 360, 390 375 C 370 350, 360 320, 332 260 C 390 270, 420 290, 440 312 Z"/>
+                                <path id="b-rw-4" class="colorable-cell uncolored" d="M 378 380 C 350 400, 325 405, 314 385 C 318 340, 320 300, 324 262 C 350 310, 360 340, 378 380 Z"/>
+                            </g>
+                            <g id="b-core-body" pointer-events="none">
+                                <path d="M 290 150 Q 260 100, 240 110" fill="none" stroke="#334155" stroke-width="5.5" stroke-linecap="round"/>
+                                <path d="M 310 150 Q 340 100, 360 110" fill="none" stroke="#334155" stroke-width="5.5" stroke-linecap="round"/>
+                                <circle cx="240" cy="110" r="7.5" fill="#334155"/>
+                                <circle cx="360" cy="110" r="7.5" fill="#334155"/>
+                                <ellipse cx="300" cy="260" rx="17" ry="98" fill="#475569" stroke="#334155" stroke-width="5"/>
+                                <circle cx="300" cy="150" r="26" fill="#475569" stroke="#334155" stroke-width="5"/>
+                                <circle cx="289" cy="145" r="3.5" fill="#FFFFFF"/>
+                                <circle cx="311" cy="145" r="3.5" fill="#FFFFFF"/>
+                                <path d="M 290 158 Q 300 167, 310 158" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+                            </g>
+                        </g>
+
+                        <!-- 2. LADYBUG LAYER -->
+                        <g id="model-ladybug" class="animal-model">
+                            <path id="l-shell-base" class="colorable-cell shell-base uncolored" d="M 300 380 C 160 380, 140 200, 300 160 C 460 200, 440 380, 300 380 Z"/>
+                            <path id="l-split-line" d="M 300 160 L 300 380" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+                            <circle id="l-spot-1" class="colorable-cell uncolored" cx="220" cy="220" r="18"/>
+                            <circle id="l-spot-2" class="colorable-cell uncolored" cx="200" cy="290" r="22"/>
+                            <circle id="l-spot-3" class="colorable-cell uncolored" cx="250" cy="340" r="16"/>
+                            <circle id="l-spot-4" class="colorable-cell uncolored" cx="380" cy="220" r="18"/>
+                            <circle id="l-spot-5" class="colorable-cell uncolored" cx="400" cy="290" r="22"/>
+                            <circle id="l-spot-6" class="colorable-cell uncolored" cx="350" cy="340" r="16"/>
+                            <g id="l-head-core" pointer-events="none">
+                                <path d="M 250 170 C 250 110, 350 110, 350 170 Z" fill="#334155" stroke="#1E293B" stroke-width="4"/>
+                                <circle cx="285" cy="140" r="3" fill="#FFFFFF"/>
+                                <circle cx="315" cy="140" r="3" fill="#FFFFFF"/>
+                                <path d="M 240 130 Q 220 90, 190 100" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 360 130 Q 380 90, 410 100" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                            </g>
+                        </g>
+
+                        <!-- 3. SNAIL LAYER -->
+                        <g id="model-snail" class="animal-model">
+                            <path id="s-foot-base" class="colorable-cell body-base uncolored" d="M 100 360 C 150 330, 420 330, 480 360 C 520 370, 520 390, 460 390 C 320 390, 120 390, 90 385 C 80 380, 85 365, 100 360 Z"/>
+                            <path id="s-neck" class="colorable-cell uncolored" d="M 440 360 C 460 320, 480 240, 520 230 C 550 220, 560 270, 520 310 C 490 340, 470 365, 450 375 Z"/>
+                            <g id="s-shell-group">
+                                <circle id="s-shell-1" class="colorable-cell uncolored" cx="290" cy="280" r="95"/>
+                                <circle id="s-shell-2" class="colorable-cell uncolored" cx="290" cy="280" r="65"/>
+                                <circle id="s-shell-3" class="colorable-cell uncolored" cx="290" cy="280" r="35"/>
+                            </g>
+                            <g id="s-face-elements" pointer-events="none">
+                                <path d="M 525 210 Q 535 160, 545 165" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 510 215 Q 505 165, 495 170" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="545" cy="165" r="5" fill="#334155"/>
+                                <circle cx="495" cy="170" r="5" fill="#334155"/>
+                                <circle cx="522" cy="240" r="3" fill="#334155"/>
+                                <path d="M 526 250 Q 532 254, 536 248" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
+                            </g>
+                        </g>
+
+                        <!-- 4. BEE LAYER -->
+                        <g id="model-bee" class="animal-model">
+                            <g id="bee-wings-layer">
+                                <ellipse id="bee-lw" class="colorable-cell uncolored" cx="260" cy="170" rx="25" ry="65" transform="rotate(-35 260 170)"/>
+                                <ellipse id="bee-rw" class="colorable-cell uncolored" cx="340" cy="170" rx="25" ry="65" transform="rotate(35 340 170)"/>
+                            </g>
+                            <ellipse id="bee-body-base" class="colorable-cell body-base uncolored" cx="300" cy="280" rx="85" ry="65"/>
+                            <path id="bee-stripe-1" class="colorable-cell uncolored" d="M 260 220 Q 265 280, 260 340 C 278 343, 292 343, 310 340 Q 315 280, 310 220 Z"/>
+                            <path id="bee-stripe-2" class="colorable-cell uncolored" d="M 340 225 Q 342 280, 340 335 C 355 330, 365 322, 378 310 Q 375 270, 368 238 Z"/>
+                            <g id="bee-face-details" pointer-events="none">
+                                <circle cx="242" cy="265" r="4.5" fill="#334155"/>
+                                <circle cx="244" cy="263" r="1.5" fill="#FFFFFF"/>
+                                <path d="M 232 282 Q 242 292, 252 280" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M 225 240 Q 200 210, 185 220" fill="none" stroke="#334155" stroke-width="4.5" stroke-linecap="round"/>
+                                <circle cx="185" cy="220" r="6" fill="#334155"/>
+                            </g>
+                        </g>
+
+                        <!-- 5. CATERPILLAR LAYER -->
+                        <g id="model-caterpillar" class="animal-model">
+                            <g id="c-legs-group" stroke="#334155" stroke-width="6" stroke-linecap="round" fill="none">
+                                <path d="M 160 330 L 150 360 M 220 340 L 210 370 M 290 340 L 280 370 M 360 330 L 350 360 M 430 300 L 420 330"/>
+                            </g>
+                            <circle id="c-seg-1" class="colorable-cell uncolored" cx="150" cy="300" r="40"/>
+                            <circle id="c-seg-2" class="colorable-cell uncolored" cx="220" cy="305" r="38"/>
+                            <circle id="c-seg-3" class="colorable-cell uncolored" cx="290" cy="300" r="38"/>
+                            <circle id="c-seg-4" class="colorable-cell uncolored" cx="360" cy="285" r="40"/>
+                            <circle id="c-seg-5" class="colorable-cell uncolored" cx="430" cy="250" r="44"/>
+                            <g id="c-face" pointer-events="none">
+                                <circle cx="445" cy="235" r="4" fill="#334155"/>
+                                <circle cx="470" cy="242" r="4" fill="#334155"/>
+                                <path d="M 452 260 Q 462 266, 470 256" fill="none" stroke="#334155" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M 440 212 Q 450 160, 475 155" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 455 210 Q 475 165, 500 170" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="475" cy="155" r="5" fill="#334155"/>
+                                <circle cx="500" cy="170" r="5" fill="#334155"/>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="particle-container" class="particle-container"></div>
+
+            <div id="success-banner" class="success-banner hidden" aria-live="polite">
+                <h2 id="success-txt" class="success-message">Beautiful Butterfly! 💖</h2>
+                <div class="heart-container" aria-hidden="true"></div>
+            </div>
+
+        </section>
+
+        <footer class="controls-section" role="contentinfo">
+            <div id="palette" class="palette-grid" role="radiogroup" aria-label="Color Palette swatches"></div>
+            <div class="actions-panel">
+                <button id="btn-undo" class="action-btn" aria-label="Undo last action">↩️ Undo</button>
+                <button id="btn-random" class="action-btn" aria-label="Magic fill random colors">🎲 Magic Fill</button>
+                <button id="btn-clear" class="action-btn" aria-label="Clear all colors back to white">🧼 Clear All</button>
+                <button id="btn-fly" class="action-btn fly-action" aria-label="Watch animal move to the garden">🚀 Watch Move! ✨</button>
+                <button id="btn-reset-pos" class="action-btn reset-action hidden" aria-label="Paint again">🎨 Paint Again</button>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+const State = {
+    selectedAnimal: 'butterfly',
+    selectedColor: '#FF7da7',
+    colorHistory: [],        
+    isMuted: true,
+    isHighContrast: false,
+    isReducedMotion: false,
+    isAnimatingFlight: false,
+    
+    colors: [
+        { name: 'Pink', hex: '#FF7da7' }, { name: 'Purple', hex: '#CE93D8' },
+        { name: 'Blue', hex: '#64B5F6' }, { name: 'Cyan', hex: '#4DD0E1' },
+        { name: 'Green', hex: '#81C784' }, { name: 'Yellow', hex: '#FFF176' },
+        { name: 'Orange', hex: '#FFB74D' }, { name: 'Red', hex: '#E57373' },
+        { name: 'Brown', hex: '#BCAAA4' }, { name: 'White', hex: '#FFFFFF' },
+        { name: 'Gray', hex: '#B0BEC5' }, { name: 'Turquoise', hex: '#4DB6AC' }
+    ],
+
+    meta: {
+        butterfly: { bannerText: 'Beautiful Butterfly! 🦋', soundType: 'chime' },
+        ladybug: { bannerText: 'Lovely Ladybug! 🐞', soundType: 'pop' },
+        snail: { bannerText: 'Sleepy Snail! 🐌', soundType: 'bubble' },
+        bee: { bannerText: 'Happy Bumblebee! 🐝', soundType: 'hum' },
+        caterpillar: { bannerText: 'Wiggling Caterpillar! 🐛', soundType: 'boing' }
+    }
+};
+
+const AudioEngine = {
+    ctx: null,
+    init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+    
+    playTone(type) {
+        if (State.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        if (type === 'pop') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
+            gain.gain.setValueAtTime(0.06, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
+        } else if (type === 'bubble') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(900, now);
+            osc.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+            gain.gain.setValueAtTime(0.04, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.15);
+        } else if (type === 'hum') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(140, now);
+            osc.frequency.linearRampToValueAtTime(120, now + 0.2);
+            gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+        } else if (type === 'boing') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(220, now);
+            osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
+            gain.gain.setValueAtTime(0.06, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
+        } else {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(80, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+            gain.gain.setValueAtTime(0.05, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
+        }
+        
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(now); osc.stop(now + 0.35);
+    },
+
+    playSuccessChime() {
+        if (State.isMuted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99].forEach((f, i) => {
+            const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(f, now + (i * 0.06));
+            gain.gain.setValueAtTime(0.02, now + (i * 0.06)); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4 + (i * 0.05));
+            osc.connect(gain); gain.connect(this.ctx.destination);
+            osc.start(now + (i * 0.06)); osc.stop(now + 0.6);
+        });
+    }
+};
+
+const DOM = {
+    viewport: document.querySelector('.viewport'),
+    positioner: document.getElementById('butterfly-positioner'),
+    wrapper: document.getElementById('butterfly-wrapper'),
+    palette: document.getElementById('palette'),
+    successBanner: document.getElementById('success-banner'),
+    successTxt: document.getElementById('success-txt'),
+    targetFlower: document.getElementById('target-flower'),
+    particleContainer: document.getElementById('particle-container'),
+    animalSelector: document.getElementById('animal-selector'),
+    
+    btnUndo: document.getElementById('btn-undo'),
+    btnRandom: document.getElementById('btn-random'),
+    btnClear: document.getElementById('btn-clear'),
+    btnFly: document.getElementById('btn-fly'),
+    btnResetPos: document.getElementById('btn-reset-pos'),
+    
+    btnContrast: document.getElementById('btn-contrast'),
+    btnMotion: document.getElementById('btn-motion'),
+    btnMute: document.getElementById('btn-mute')
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    buildPaletteUI();
+    attachEventSystems();
+    document.querySelectorAll('.colorable-cell').forEach(cell => {
+        cell.addEventListener('click', (e) => handleCellPaint(e.target));
+    });
+    syncActiveAnimalView();
+});
+
+function syncActiveAnimalView() {
+    DOM.positioner.setAttribute('data-active-animal', State.selectedAnimal);
+    DOM.successTxt.innerText = State.meta[State.selectedAnimal].bannerText;
+    State.colorHistory = [];
+    resetPositionsToDefault();
+}
+
+function buildPaletteUI() {
+    DOM.palette.innerHTML = '';
+    State.colors.forEach((color, idx) => {
+        const swatch = document.createElement('button');
+        swatch.className = 'color-swatch';
+        swatch.setAttribute('role', 'radio');
+        swatch.setAttribute('aria-label', color.name);
+        swatch.style.backgroundColor = color.hex;
+        if (idx === 0) swatch.classList.add('selected');
+        swatch.addEventListener('click', () => {
+            State.selectedColor = color.hex;
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            swatch.classList.add('selected');
+            AudioEngine.playTone('flutter');
+        });
+        DOM.palette.appendChild(swatch);
+    });
+}
+
+function attachEventSystems() {
+    DOM.animalSelector.addEventListener('change', (e) => {
+        if (State.isAnimatingFlight) return;
+        State.selectedAnimal = e.target.value;
+        syncActiveAnimalView();
+    });
+
+    DOM.btnUndo.addEventListener('click', executeUndoOp);
+    DOM.btnRandom.addEventListener('click', executeRandomMagicFill);
+    DOM.btnClear.addEventListener('click', executeClearAllWings);
+    DOM.btnFly.addEventListener('click', executeFlightTrajectory);
+    DOM.btnResetPos.addEventListener('click', resetPositionsToDefault);
+
+    DOM.btnMute.addEventListener('click', () => {
+        State.isMuted = !State.isMuted;
+        DOM.btnMute.setAttribute('aria-pressed', State.isMuted ? 'true' : 'false');
+        DOM.btnMute.innerHTML = State.isMuted ? '🔇 Sound Off' : '🔊 Sound On';
+        if (!State.isMuted) { AudioEngine.init(); AudioEngine.playSuccessChime(); }
+    });
+
+    DOM.btnContrast.addEventListener('click', () => {
+        State.isHighContrast = !State.isHighContrast;
+        document.documentElement.setAttribute('data-a11y-contrast', State.isHighContrast ? 'true' : 'false');
+        DOM.btnContrast.setAttribute('aria-pressed', State.isHighContrast ? 'true' : 'false');
+    });
+
+    DOM.btnMotion.addEventListener('click', () => {
+        State.isReducedMotion = !State.isReducedMotion;
+        document.documentElement.setAttribute('data-a11y-motion', State.isReducedMotion ? 'true' : 'false');
+        DOM.btnMotion.setAttribute('aria-pressed', State.isReducedMotion ? 'true' : 'false');
+    });
+}
+
+function handleCellPaint(cellElement) {
+    if (State.isAnimatingFlight) return;
+    const previousColor = cellElement.style.fill || getComputedStyle(cellElement).fill;
+    const targetColor = State.selectedColor;
+    
+    if (compareRgbColors(previousColor, targetColor)) return;
+    cellElement.classList.remove('uncolored');
+
+    State.colorHistory.push({ elementId: cellElement.id, fromColor: previousColor, toColor: targetColor });
+    cellElement.style.fill = targetColor;
+    AudioEngine.playTone(State.meta[State.selectedAnimal].soundType);
+}
+
+function executeUndoOp() {
+    if (State.colorHistory.length === 0 || State.isAnimatingFlight) return;
+    const lastAction = State.colorHistory.pop();
+    const cell = document.getElementById(lastAction.elementId);
+    if (cell) {
+        cell.style.fill = lastAction.fromColor;
+        if (lastAction.fromColor === '' || lastAction.fromColor === 'rgb(255, 255, 255)') cell.classList.add('uncolored');
+        AudioEngine.playTone('flutter');
+    }
+}
+
+function executeRandomMagicFill() {
+    if (State.isAnimatingFlight) return;
+    const batchActions = [];
+    document.querySelectorAll(`#model-${State.selectedAnimal} .colorable-cell`).forEach(cell => {
+        const prev = cell.style.fill || getComputedStyle(cell).fill;
+        const randomHex = State.colors[Math.floor(Math.random() * State.colors.length)].hex;
+        cell.classList.remove('uncolored');
+        cell.style.fill = randomHex;
+        batchActions.push({ elementId: cell.id, fromColor: prev });
+    });
+    State.colorHistory.push({ isComposite: true, actions: batchActions });
+    AudioEngine.playSuccessChime();
+}
+
+function executeClearAllWings() {
+    if (State.isAnimatingFlight) return;
+    document.querySelectorAll(`#model-${State.selectedAnimal} .colorable-cell`).forEach(cell => {
+        cell.style.fill = ''; cell.classList.add('uncolored');
+    });
+    State.colorHistory = [];
+    AudioEngine.playTone('flutter');
+}
+
+function executeFlightTrajectory() {
+    if (State.isAnimatingFlight) return;
+    State.isAnimatingFlight = true;
+    
+    DOM.animalSelector.disabled = true;
+    DOM.btnFly.classList.add('hidden');
+    DOM.btnUndo.disabled = true; DOM.btnClear.disabled = true; DOM.btnRandom.disabled = true;
+    DOM.wrapper.classList.remove('hovering');
+
+    const bRect = DOM.positioner.getBoundingClientRect();
+    const fRect = DOM.targetFlower.getBoundingClientRect();
+    const bCX = bRect.left + (bRect.width / 2);
+    const bCY = bRect.top + (bRect.height / 2);
+    const fCX = fRect.left + (fRect.width / 2);
+
+    let fCY = fRect.top + (fRect.height * 0.25);
+    if (State.selectedAnimal === 'snail' || State.selectedAnimal === 'caterpillar') {
+        fCY = fRect.top + (fRect.height * 0.75); 
+    }
+
+    const dX = fCX - bCX;
+    const dY = fCY - bCY;
+
+    if (State.selectedAnimal === 'butterfly') DOM.wrapper.classList.add('flapping');
+    if (State.selectedAnimal === 'bee') DOM.wrapper.classList.add('buzzing');
+    if (State.selectedAnimal === 'snail') DOM.wrapper.classList.add('crawling-snail');
+    if (State.selectedAnimal === 'caterpillar') DOM.wrapper.classList.add('crawling-caterpillar');
+
+    let particleTimer = setInterval(() => {
+        if (!State.isReducedMotion) {
+            const wR = DOM.wrapper.getBoundingClientRect();
+            const pR = DOM.particleContainer.getBoundingClientRect();
+            createSparkleParticle((wR.left - pR.left) + (wR.width/2), (wR.top - pR.top) + (wR.height/2));
+        }
+    }, 80);
+
+    let soundTimer = setInterval(() => {
+        AudioEngine.playTone(State.meta[State.selectedAnimal].soundType);
+    }, State.selectedAnimal === 'bee' ? 140 : 250);
+
+    DOM.positioner.style.transition = State.isReducedMotion ? 'transform 0.5s ease' : 'transform 4.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    
+    requestAnimationFrame(() => {
+        DOM.positioner.style.transform = `translate(calc(-50% + ${dX}px), calc(-50% + ${dY}px)) scale(0.46)`;
+    });
+
+    setTimeout(() => {
+        clearInterval(particleTimer); clearInterval(soundTimer);
+        DOM.wrapper.className = 'animal-wrapper'; 
+        DOM.positioner.style.transform += ' rotate(5deg)';
+        AudioEngine.playSuccessChime();
+        DOM.successBanner.classList.remove('hidden');
+        if (!State.isReducedMotion) generateHeartsBurst();
+        DOM.btnResetPos.classList.remove('hidden');
+    }, State.isReducedMotion ? 550 : 4555);
+}
+
+function resetPositionsToDefault() {
+    DOM.successBanner.classList.add('hidden');
+    DOM.btnResetPos.classList.add('hidden');
+    
+    DOM.positioner.style.transition = 'none';
+    DOM.positioner.style.transform = 'translate(-50%, -50%) scale(1)';
+    DOM.wrapper.className = 'animal-wrapper hovering';
+    
+    DOM.particleContainer.innerHTML = '';
+    
+    const heartContainer = document.querySelector('.heart-container');
+    if(heartContainer) heartContainer.innerHTML = '';
+
+    setTimeout(() => {
+        State.isAnimatingFlight = false;
+        DOM.animalSelector.disabled = false;
+        DOM.btnFly.classList.remove('hidden');
+        DOM.btnUndo.disabled = false; DOM.btnClear.disabled = false; DOM.btnRandom.disabled = false;
+    }, 150);
+}
+
+function createSparkleParticle(x, y) {
+    const p = document.createElement('div'); p.className = 'sparkle';
+    p.style.left = `${x}px`; p.style.top = `${y}px`;
+    p.style.setProperty('--dx', `${(Math.random() - 0.5) * 120}px`);
+    p.style.setProperty('--dy', `${(Math.random() * 60) + 30}px`);
+    DOM.particleContainer.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+}
+
+function generateHeartsBurst() {
+    const container = document.querySelector('.heart-container'); 
+    if(!container) return;
+    container.innerHTML = '';
+    const tokens = ['❤️', '✨', '💖', '⭐', '🌸'];
+    for (let i = 0; i < 10; i++) {
+        const h = document.createElement('span'); h.className = 'heart';
+        h.innerText = tokens[Math.floor(Math.random() * tokens.length)];
+        h.style.left = `${Math.random() * 80 + 10}%`; h.style.top = `${Math.random() * 30 + 50}%`;
+        h.style.animationDelay = `${Math.random() * 0.5}s`; container.appendChild(h);
+    }
+}
+
+function compareRgbColors(rgb1, hex2) {
+    if (!rgb1 || !hex2) return false;
+    const div = document.createElement('div'); div.style.color = hex2;
+    document.body.appendChild(div); 
+    const res = getComputedStyle(div).color === rgb1;
+    document.body.removeChild(div); 
+    return res;
+}
+    </script>
+</body>
+</html>
